@@ -3,7 +3,6 @@ package org.academiadecodigo.hashtronauts.server.users;
 import org.academiadecodigo.hashtronauts.server.utils.FileSystem;
 import org.academiadecodigo.hashtronauts.server.utils.Utils;
 
-import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.LinkedList;
 import java.util.List;
@@ -135,19 +134,20 @@ public class UserStore {
      * @param user the user object to save
      */
     public void saveUser(User user) {
-        String entry = user.getId()+":"+user.getId()+":"+user.getPassword()+";";
+        String entry = user.getId() + ":" + user.getUsername() + ":" + user.getPassword() + ";";
 
         FileSystem.saveFile(USERS_PATH+Utils.getCRC32(user.getUsername())+".txt", entry.getBytes());
     }
 
     /**
      * Creates a new user and then saves it to file system (non-blocking)
-     *
-     * @param username the user username
+     *  @param username the user username
      * @param password the user password hashcoded
      */
-    public void createUser(String username, int password) {
-        saveUser(new User(nextID, username, password));
+    public User createUser(String username, int password) {
+        User user = new User(nextID, username, password);
+
+        saveUser(user);
         nextID++;
 
         synchronized (this) {
@@ -158,5 +158,6 @@ public class UserStore {
                 }
             }).start();
         }
+        return user;
     }
 }

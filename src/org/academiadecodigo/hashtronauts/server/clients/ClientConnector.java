@@ -28,4 +28,8 @@ public class ClientConnector {
     public User login(String user, int password) {
         return server.LoginUser(user, password);
     }
+
+    public User register(String username, int password) {
+        return server.registerUser(username, password);
+    }
 }

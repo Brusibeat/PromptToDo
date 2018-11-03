@@ -20,10 +20,11 @@ public class UserHelper {
         String receivedMessage = "";
         String[] args = {username, password};
 
-        server.sendToServer(Communication.buildMessage(Communication.Command.LOGIN, args));
+        server.sendToServer(Communication.buildMessage(command, args));
 
         try {
             receivedMessage = server.receiveFromServer();
+            receivedMessage = receivedMessage.split(" ")[2];
         } catch (IOException e) {
             System.out.println(ClientMessages.ERROR_RECEIVING);
         }

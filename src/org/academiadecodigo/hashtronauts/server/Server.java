@@ -101,4 +101,8 @@ public class Server {
     public User LoginUser(String user, int password) {
         return users.validateUser(user, password);
     }
+
+    public User registerUser(String username, int password) {
+        return users.createUser(username, password);
+    }
 }

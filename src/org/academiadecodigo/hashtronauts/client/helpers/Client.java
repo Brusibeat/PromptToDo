@@ -99,7 +99,7 @@ public class Client {
     private String loginUser() {
         Credentials credentials = runCredentialsPrompt();
 
-        if (!UserHelper.sendCommand(serverListener, Communication.Command.LOGIN, credentials.username, credentials.username)) {
+        if (!UserHelper.sendCommand(serverListener, Communication.Command.LOGIN, credentials.username, credentials.password)) {
             if (runConfirmationPrompt(ClientMessages.INVALID_CREDENTIALS.toString())){
                 return loginUser();
             } else {
@@ -107,9 +107,9 @@ public class Client {
             }
         }
 
-        System.out.println(ClientMessages.LOGIN_SUCCESS + username);
+        System.out.println(ClientMessages.LOGIN_SUCCESS + credentials.username);
 
-        return username;
+        return credentials.username;
     }
 
     /**
@@ -125,7 +125,7 @@ public class Client {
     private void registerUser() {
         Credentials credentials = runCredentialsPrompt();
 
-        if (!UserHelper.sendCommand(serverListener, Communication.Command.REGISTER, credentials.username, credentials.username)) {
+        if (!UserHelper.sendCommand(serverListener, Communication.Command.REGISTER, credentials.username, credentials.password)) {
             System.out.println(ClientMessages.REGISTER_FAIL.toString() + credentials.username);
 
             if (runConfirmationPrompt(ClientMessages.INVALID_CREDENTIALS.toString())){
@@ -168,7 +168,7 @@ public class Client {
         options.add("n");
 
         StringSetInputScanner confirmationScanner = new StringSetInputScanner(options);
-        confirmationScanner.setMessage(message + "? (Y/N)");
+        confirmationScanner.setMessage(message);
 
         return prompt.getUserInput(confirmationScanner).toLowerCase().equals("y");
     }

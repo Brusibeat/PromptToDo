@@ -22,7 +22,7 @@ public enum ClientMessages {
     FAREWELL("Leaving PromptToDo! ByeBye!"),
 
     //Login
-    INVALID_CREDENTIALS("Invalid Credentials. Do you want to try again"),
+    INVALID_CREDENTIALS("Invalid Credentials. Do you want to try again? (Y/N) "),
     LOGIN_SUCCESS("You logged in successfully as "),
     ALREADY_LOGGEDIN("You already logged in as "),
 

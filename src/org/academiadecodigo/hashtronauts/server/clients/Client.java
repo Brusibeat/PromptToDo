@@ -63,6 +63,10 @@ public class Client implements Runnable {
             try {
                 String message = receiveFromClient();
 
+                if (message == null) {
+                    return;
+                }
+
                 handleInput(message);
 
             } catch (IOException e) {
@@ -90,14 +94,27 @@ public class Client implements Runnable {
         Command command = Communication.getCommandFromMessage(message);
 
         String[] args = message.split(" ")[2].split(",");
+        //POST register qwerty,123456
 
+        String response;
         if (method == Method.POST) {
             switch (command) {
                 case LOGIN:
                     user = serverBridge.login(args[0], args[1].hashCode());
+                    response = "true";
                     if (user == null ){
-                        sendToClient(Communication.buildMessage(Command.RESPONSE, new String[]{"true"}));
+                        response = "false";
                     }
+                    sendToClient(Communication.buildMessage(Command.RESPONSE, new String[]{response}));
+
+                    break;
+                case REGISTER:
+                    user = serverBridge.register(args[0], args[1].hashCode());
+                    response = "true";
+                    if (user == null) {
+                        response = "false";
+                    }
+                    sendToClient(Communication.buildMessage(Command.RESPONSE, new String[]{response}));
             }
         }
     }
