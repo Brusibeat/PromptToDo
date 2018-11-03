@@ -40,7 +40,7 @@ public class ServerListener implements Runnable {
     }
 
     /**
-     * New Thread start point (Blank for now)
+     * New Thread listenConnections point (Blank for now)
      */
     @Override
     public void run() {
