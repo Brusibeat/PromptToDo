@@ -17,6 +17,7 @@ public class Menus {
 
         MenuItems[] menuItems = {
                 MenuItems.LOGIN,
+                MenuItems.LOGOUT,
                 MenuItems.REGISTER,
                 MenuItems.EXIT
         };

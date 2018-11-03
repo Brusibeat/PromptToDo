@@ -6,6 +6,7 @@ package org.academiadecodigo.hashtronauts.client.menus;
 public enum MenuItems {
     //Main Menu
     LOGIN("Login"),
+    LOGOUT("Logout"),
     REGISTER("Register"),
     EXIT("Exit");
 
