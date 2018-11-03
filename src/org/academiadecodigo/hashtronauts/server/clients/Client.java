@@ -52,6 +52,9 @@ public class Client implements Runnable {
         this.serverBridge = serverBridge;
     }
 
+    /**
+     * Client Thread Entry Point
+     */
     @Override
     public void run() {
         while (!clientSocket.isClosed()) {
@@ -64,6 +67,12 @@ public class Client implements Runnable {
         System.out.println(ServerMessages.CLIENT_DISCONNECTED);
     }
 
+    /**
+     * Sends a message to the client
+     *
+     * @param text message
+     * @return true if successful
+     */
     public boolean sendToClient(String text) {
         if (clientSocket.isClosed()) {
             return false;
@@ -73,6 +82,9 @@ public class Client implements Runnable {
         return true;
     }
 
+    /**
+     * Disconnects this client
+     */
     public void disconnect() {
         sendToClient(Communication.buildMessage(Communication.Command.SHUTDOWN, null));
         try {

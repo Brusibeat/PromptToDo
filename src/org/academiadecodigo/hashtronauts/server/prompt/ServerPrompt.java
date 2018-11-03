@@ -5,8 +5,10 @@ import org.academiadecodigo.hashtronauts.server.Server;
 import org.academiadecodigo.hashtronauts.server.menus.MenuItems;
 import org.academiadecodigo.hashtronauts.server.menus.Menus;
 
+/**
+ * Server Prompt for local control
+ */
 public class ServerPrompt implements Runnable {
-
 
     private final Server server;
 

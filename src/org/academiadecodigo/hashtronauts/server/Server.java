@@ -23,6 +23,13 @@ public class Server {
         threadPool = Executors.newCachedThreadPool();
     }
 
+
+    /**
+     * Starts the server with provided port
+     *
+     * @param serverPort server port number
+     * @return true if successful
+     */
     boolean initServer(int serverPort) {
         try {
             socket = new ServerSocket(serverPort);
@@ -63,6 +70,10 @@ public class Server {
         }
     }
 
+
+    /**
+     * Shutdown the server and exit
+     */
     public void shutdown() {
         try {
             socket.close();
