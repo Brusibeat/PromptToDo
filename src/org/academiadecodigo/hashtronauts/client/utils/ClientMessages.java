@@ -26,6 +26,10 @@ public enum ClientMessages {
     LOGIN_SUCCESS("You logged in successfully as "),
     ALREADY_LOGGEDIN("You already logged in as "),
 
+    //Register
+    REGISTER_SUCCESS("You registered successfully the username "),
+    REGISTER_FAIL("You can't register the username "),
+
     //Others
     DISCONNECTED("Disconnected from the Server!"),
     ERROR_RECEIVING("An error occurred while receiving data form the server.");

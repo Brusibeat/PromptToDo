@@ -37,7 +37,8 @@ public class Communication {
     public enum Command {
         //Server
         SHUTDOWN(Method.POST, "shutdown", false),
-        LOGIN(Method.POST, "login", true);
+        LOGIN(Method.POST, "login", true),
+        REGISTER(Method.POST, "register", true);
 
         private final Method method;
         private final String message;
