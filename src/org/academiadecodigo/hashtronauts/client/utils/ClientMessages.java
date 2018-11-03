@@ -21,8 +21,14 @@ public enum ClientMessages {
     MAIN_MENU_ERROR("Wrong option number!"),
     FAREWELL("Leaving PromptToDo! ByeBye!"),
 
+    //Login
+    INVALID_CREDENTIALS("Invalid Credentials. Do you want to try again"),
+    LOGIN_SUCCESS("You logged in successfully as "),
+    ALREADY_LOGGEDIN("You already logged in as "),
+
     //Others
-    DISCONNECTED("Disconnected from the Server!");
+    DISCONNECTED("Disconnected from the Server!"),
+    ERROR_RECEIVING("An error occurred while receiving data form the server.");
 
     private final String message;
 

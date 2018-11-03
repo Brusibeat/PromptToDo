@@ -39,6 +39,17 @@ public class ServerListener implements Runnable {
         return true;
     }
 
+    public String receiveFromServer() throws IOException {
+        StringBuilder sb = new StringBuilder();
+        String message;
+
+        while ((message = inputStream.readLine()) != null) {
+            sb.append(message);
+        }
+
+        return sb.toString();
+    }
+
     /**
      * New Thread listenConnections point (Blank for now)
      */
