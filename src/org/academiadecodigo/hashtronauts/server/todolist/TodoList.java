@@ -114,4 +114,12 @@ public class TodoList {
         return newItem;
     }
 
+    public TodoItem createItem(int id, String value){
+        TodoItem newItem = new TodoItem(id, value);
+
+        items.put(id, newItem);
+
+        return newItem;
+    }
+
 }
