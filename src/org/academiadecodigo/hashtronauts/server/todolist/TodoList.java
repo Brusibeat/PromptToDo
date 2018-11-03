@@ -1,5 +1,7 @@
 package org.academiadecodigo.hashtronauts.server.todolist;
 
+import org.academiadecodigo.hashtronauts.server.users.User;
+
 import java.util.HashMap;
 
 public class TodoList {
