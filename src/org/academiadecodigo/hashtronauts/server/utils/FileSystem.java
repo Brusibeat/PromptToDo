@@ -44,7 +44,7 @@ public class FileSystem {
      * @param filePath - Path to the file to save data in
      * @param data - Data to write in the file
      */
-    public static void saveFile(String filePath, Byte[] data){
+    public static void saveFile(String filePath, byte[] data){
         cleanFile(filePath);
 
         BufferedWriter writer;
