@@ -2,10 +2,17 @@ package org.academiadecodigo.hashtronauts.client.menus;
 
 import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
-import org.academiadecodigo.hashtronauts.client.ClientMessages;
+import org.academiadecodigo.hashtronauts.client.utils.ClientMessages;
 
 public class Menus {
 
+    /**
+     * Displays the Main menu
+     *
+     * @param prompt a prompt to show the Menu
+     * @return The menu entry Selected (LOGIN/REGISTER/EXIT)
+     * @see MenuItems for possible Items
+     */
     public static MenuItems getMainMenu(Prompt prompt) {
 
         MenuItems[] menuItems = {

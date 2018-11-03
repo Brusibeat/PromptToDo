@@ -1,4 +1,4 @@
-package org.academiadecodigo.hashtronauts.client;
+package org.academiadecodigo.hashtronauts.client.utils;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -6,6 +6,11 @@ import java.util.Scanner;
 
 public class ClientUtils {
 
+    /**
+     * Asks the user for a valid port number
+     *
+     * @return the port number
+     */
     public static int getPort() {
 
         System.out.print(ClientMessages.SELECT_PORT);
@@ -36,6 +41,11 @@ public class ClientUtils {
         return serverPort;
     }
 
+    /**
+     * Aks the user for a valid host
+     *
+     * @return the host INetAddress
+     */
     public static InetAddress getHost() {
 
         InetAddress inetAddress = null;

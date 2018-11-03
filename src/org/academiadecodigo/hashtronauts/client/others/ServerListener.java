@@ -1,4 +1,6 @@
-package org.academiadecodigo.hashtronauts.client;
+package org.academiadecodigo.hashtronauts.client.others;
+
+import org.academiadecodigo.hashtronauts.client.utils.ClientMessages;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,6 +24,12 @@ public class ServerListener implements Runnable {
         }
     }
 
+    /**
+     * Sends a message to the server
+     *
+     * @param message message to be sent
+     * @return true if successful
+     */
     public boolean sendToServer(String message) {
         if (serverConnection.isClosed()) {
             return false;
@@ -31,8 +39,26 @@ public class ServerListener implements Runnable {
         return true;
     }
 
+    /**
+     * New Thread start point (Blank for now)
+     */
     @Override
     public void run() {
+    }
 
+    /**
+     * Closes the socket
+     */
+    public void close() {
+        synchronized (this) {
+            try {
+                if (!serverConnection.isClosed()) {
+                    serverConnection.close();
+                    System.out.println(ClientMessages.DISCONNECTED);
+                }
+            } catch (IOException ex) {
+                System.err.println(ex.getMessage());
+            }
+        }
     }
 }
