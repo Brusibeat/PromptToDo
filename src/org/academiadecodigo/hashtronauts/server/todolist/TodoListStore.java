@@ -3,6 +3,7 @@ package org.academiadecodigo.hashtronauts.server.todolist;
 import org.academiadecodigo.hashtronauts.server.utils.FileSystem;
 import org.academiadecodigo.hashtronauts.server.utils.Utils;
 
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.zip.CRC32;
 
@@ -36,7 +37,12 @@ public class TodoListStore {
     public void loadTodos(String fileName){
         String codedName = Utils.getCRC32(fileName);
         String filePath = PATH + codedName + FILE_FORMAT;
-        byte[] data = FileSystem.loadFile( filePath );
+        byte[] data = new byte[0];
+        data = FileSystem.loadFile( filePath );
+
+        if (data == null ) {
+            return;
+        }
 
         if( !todoLists.containsKey(fileName)){
             createTodo( fileName );

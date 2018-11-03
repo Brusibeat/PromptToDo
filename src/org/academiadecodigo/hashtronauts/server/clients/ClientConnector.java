@@ -1,6 +1,7 @@
 package org.academiadecodigo.hashtronauts.server.clients;
 
 import org.academiadecodigo.hashtronauts.server.Server;
+import org.academiadecodigo.hashtronauts.server.users.User;
 
 
 /**
@@ -22,5 +23,9 @@ public class ClientConnector {
      */
     public void disconnect() {
         client.disconnect();
+    }
+
+    public User login(String user, int password) {
+        return server.LoginUser(user, password);
     }
 }

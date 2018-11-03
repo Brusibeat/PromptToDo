@@ -9,30 +9,34 @@ public class FileSystem {
      * @param filePath - Path to the requested file
      * @return A byte array containing all the data in the file.
      */
-    public static byte[] loadFile(String filePath){
+    public static byte[] loadFile(String filePath) {
 
         String result = "";
         BufferedReader reader = null;
 
         try {
             String line;
-            reader = new BufferedReader(new FileReader(filePath));
+
+            File file = new File(filePath);
+            FileReader fileReader = new FileReader(file);
+
+            reader = new BufferedReader(fileReader);
 
             while ((line = reader.readLine()) != null) {
                 result += line + "\n";
 
             }
 
+            reader.close();
+
+        } catch (FileNotFoundException ex) {
+            return null;
+
         } catch (IOException ex) {
             System.err.println("Something went wrong in loadFile() method.");
             ex.printStackTrace();
-        } finally {
 
-            try {
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            return null;
         }
 
         return result.getBytes();
@@ -51,8 +55,10 @@ public class FileSystem {
 
         try {
 
-            writer = new BufferedWriter(new FileWriter(filePath));
-            writer.write( data.toString() );
+            FileOutputStream outputStream = new FileOutputStream(filePath);
+
+            writer = new BufferedWriter(new OutputStreamWriter(outputStream));
+            writer.write( new String(data) );
             writer.close();
 
         } catch (IOException ex) {
@@ -71,7 +77,14 @@ public class FileSystem {
 
         try {
 
-            writer = new BufferedWriter(new FileWriter(filePath));
+            File file = new File(filePath);
+
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+
+            FileOutputStream outputStream = new FileOutputStream(file);
+
+            writer = new BufferedWriter(new OutputStreamWriter(outputStream));
             writer.write( "" );
             writer.close();
 

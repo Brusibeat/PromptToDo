@@ -1,5 +1,9 @@
 package org.academiadecodigo.hashtronauts.server.users;
 
+import org.academiadecodigo.hashtronauts.server.utils.FileSystem;
+import org.academiadecodigo.hashtronauts.server.utils.Utils;
+
+import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,14 +11,26 @@ import java.util.List;
 /** Stores the Logged Users && manages the user Database */
 public class UserStore {
 
-    public static final String USERS_PATH = "/resources/users/";
-    public static final String USERS_INFO_PATH = "/resources/users/userInfo.txt";
+    public static final String USERS_PATH = "resources/users/";
+    public static final String USERS_INFO_PATH = "resources/users/userInfo.txt";
 
     private List<User> users;
     private int nextID;
 
     public UserStore() {
+        nextID = 0;
         this.users = new LinkedList<>();
+    }
+
+    public void initStore() {
+        byte[] data = FileSystem.loadFile(USERS_INFO_PATH);
+
+        if (data == null) {
+            FileSystem.saveFile(USERS_INFO_PATH, (nextID+"").getBytes());
+            data = (nextID+"").getBytes();
+        }
+
+        nextID = Integer.parseInt(new String(data).replaceAll("\n", ""));
     }
 
     /**
@@ -61,7 +77,7 @@ public class UserStore {
     public User validateUser(String username, int password) {
         User user = getUser(username);
         if (user == null ){
-            return null;
+            return loadUser(username);
         }
 
         if (user.validPassword(password)) {
@@ -76,9 +92,14 @@ public class UserStore {
      * @param username the user to load
      * @return true if successful
      */
-    public boolean loadUser(String username) {
-        byte[] file = null;
-        //byte[] file = readFile(USERS_PATH+Utils.getCRC32(username)+".txt");
+    public User loadUser(String username) {
+        byte[] file;
+
+        file = FileSystem.loadFile(USERS_PATH+Utils.getCRC32(username)+".txt");
+
+        if (file == null) {
+            return null;
+        }
 
         String fileStr = "";
         try {
@@ -89,7 +110,7 @@ public class UserStore {
         int endOfLine = fileStr.indexOf(";");
 
         if (endOfLine == -1) {
-            return false;
+            return null;
         }
 
         String user = fileStr.substring(0, endOfLine);
@@ -97,15 +118,14 @@ public class UserStore {
         String[] userInfo = user.split(":");
 
         if (userInfo.length != 3) {
-            return false;
+            return null;
         }
 
         if (userInfo[1].equals(username)) {
-            users.add(new User(Integer.parseInt(userInfo[0]), userInfo[1], Integer.parseInt(userInfo[2])));
-            return true;
+            return new User(Integer.parseInt(userInfo[0]), userInfo[1], Integer.parseInt(userInfo[2]));
         }
 
-        return false;
+        return null;
     }
 
 
@@ -117,18 +137,8 @@ public class UserStore {
     public void saveUser(User user) {
         String entry = user.getId()+":"+user.getId()+":"+user.getPassword()+";";
 
-        //saveFile(USERS_PATH+Utils.getCRC32(username)+".txt", entry);
+        FileSystem.saveFile(USERS_PATH+Utils.getCRC32(user.getUsername())+".txt", entry.getBytes());
     }
-
-    /**
-     *  Saves all users
-     */
-    public void saveUsers() {
-        for (User user : users) {
-            saveUser(user);
-        }
-    }
-
 
     /**
      * Creates a new user and then saves it to file system (non-blocking)
@@ -140,11 +150,13 @@ public class UserStore {
         saveUser(new User(nextID, username, password));
         nextID++;
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                //saveFile(USERS_INFO_PATH, nextID);
-            }
-        }).start();
+        synchronized (this) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    FileSystem.saveFile(USERS_INFO_PATH, (nextID+"").getBytes());
+                }
+            }).start();
+        }
     }
 }

@@ -43,7 +43,7 @@ public class ServerListener implements Runnable {
         StringBuilder sb = new StringBuilder();
         String message;
 
-        while ((message = inputStream.readLine()) != null) {
+        while ((message = inputStream.readLine()) != null && !message.isEmpty()) {
             sb.append(message);
         }
 

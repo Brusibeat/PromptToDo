@@ -1,6 +1,7 @@
 package org.academiadecodigo.hashtronauts.server.clients;
 
 import org.academiadecodigo.hashtronauts.comms.Communication;
+import org.academiadecodigo.hashtronauts.server.users.User;
 import org.academiadecodigo.hashtronauts.server.utils.ServerMessages;
 
 import java.io.BufferedReader;
@@ -9,24 +10,25 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import static org.academiadecodigo.hashtronauts.comms.Communication.*;
+
 /**
  * Represents an client itself
  */
 public class Client implements Runnable {
 
-    /**
-     * Connection to the client
-     */
+    /** Connection to the client */
     private final Socket clientSocket;
-    /**
-     * Client Streams
-     */
+
+    /** Client Streams */
     private PrintWriter outputStream;
     private BufferedReader inputStream;
-    /**
-     * Connection to the server
-     */
+
+    /** Connection to the server */
     private ClientConnector serverBridge;
+
+    /** Associated user to this client */
+    private User user;
 
     public Client(Socket socket) {
         this.clientSocket = socket;
@@ -59,12 +61,61 @@ public class Client implements Runnable {
     public void run() {
         while (!clientSocket.isClosed()) {
             try {
-                wait(100);
-            } catch (InterruptedException e) {
+                String message = receiveFromClient();
+
+                handleInput(message);
+
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         System.out.println(ServerMessages.CLIENT_DISCONNECTED);
+
+    }
+
+
+    /**
+     * Handles messages received from client
+     *
+     * @param message the message received
+     */
+    private void handleInput(String message) {
+
+        if (!isValid(message)) {
+            return;
+        }
+
+        Method method = Communication.getMethodFromMessage(message);
+
+        Command command = Communication.getCommandFromMessage(message);
+
+        String[] args = message.split(" ")[2].split(",");
+
+        if (method == Method.POST) {
+            switch (command) {
+                case LOGIN:
+                    user = serverBridge.login(args[0], args[1].hashCode());
+                    if (user == null ){
+                        sendToClient(Communication.buildMessage(Command.RESPONSE, new String[]{"true"}));
+                    }
+            }
+        }
+    }
+
+    /**
+     * Gets a message from the client
+     *
+     * @return client message
+     */
+    public String receiveFromClient() throws IOException {
+        StringBuilder sb = new StringBuilder();
+        String message;
+
+        while ((message = inputStream.readLine()) != null && !message.isEmpty()) {
+            sb.append(message);
+        }
+
+        return sb.toString();
     }
 
     /**
@@ -86,7 +137,7 @@ public class Client implements Runnable {
      * Disconnects this client
      */
     public void disconnect() {
-        sendToClient(Communication.buildMessage(Communication.Command.SHUTDOWN, null));
+        sendToClient(buildMessage(Command.SHUTDOWN, null));
         try {
             clientSocket.close();
         } catch (IOException e) {

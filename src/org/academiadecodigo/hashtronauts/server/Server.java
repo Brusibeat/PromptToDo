@@ -2,6 +2,8 @@ package org.academiadecodigo.hashtronauts.server;
 
 import org.academiadecodigo.hashtronauts.server.clients.Client;
 import org.academiadecodigo.hashtronauts.server.clients.ClientConnector;
+import org.academiadecodigo.hashtronauts.server.users.User;
+import org.academiadecodigo.hashtronauts.server.users.UserStore;
 import org.academiadecodigo.hashtronauts.server.utils.ServerMessages;
 
 import java.io.IOException;
@@ -18,7 +20,10 @@ public class Server {
     private final ExecutorService threadPool;
     private ServerSocket socket;
 
+    private final UserStore users;
+
     public Server() {
+        users = new UserStore();
         clients = new HashSet<>();
         threadPool = Executors.newCachedThreadPool();
     }
@@ -31,6 +36,8 @@ public class Server {
      * @return true if successful
      */
     boolean initServer(int serverPort) {
+        users.initStore();
+
         try {
             socket = new ServerSocket(serverPort);
         } catch (IOException e) {
@@ -89,5 +96,9 @@ public class Server {
 
         System.out.println(ServerMessages.SERVER_CLOSING);
         System.exit(0);
+    }
+
+    public User LoginUser(String user, int password) {
+        return users.validateUser(user, password);
     }
 }
