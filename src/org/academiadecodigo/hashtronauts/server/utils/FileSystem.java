@@ -39,11 +39,13 @@ public class FileSystem {
     }
 
     /**
-     * Save data in {@param data} to a file located in {@param filePath}
+     * Save all data in {@param data} to a file located in {@param filePath}. Method first calls the cleanFile()
+     * method to clean the file before writing updated data on it.
      * @param filePath - Path to the file to save data in
      * @param data - Data to write in the file
      */
     public static void saveFile(String filePath, Byte[] data){
+        cleanFile(filePath);
 
         BufferedWriter writer;
 
@@ -55,6 +57,26 @@ public class FileSystem {
 
         } catch (IOException ex) {
             System.err.println("Something went wrong in saveFile() method");
+            ex.printStackTrace();
+        }
+
+    }
+
+    /**
+     * Clean up a file of data.
+     * @param filePath
+     */
+    private static void cleanFile(String filePath){
+        BufferedWriter writer;
+
+        try {
+
+            writer = new BufferedWriter(new FileWriter(filePath));
+            writer.write( "" );
+            writer.close();
+
+        } catch (IOException ex) {
+            System.err.println("Something went wrong in cleanFile() method");
             ex.printStackTrace();
         }
 
