@@ -4,11 +4,15 @@ import java.util.HashMap;
 
 public class TodoList {
 
-    private int id;
+    private String id;
     private HashMap<Integer, TodoItem> items;
     private User owner;
 
-    public TodoList(int id){
+    /**
+     * Constructs a new instance of {@code TodoList}, with a given ID and reference of the owner
+     * @param id - The ID of the list
+     */
+    public TodoList(String id){
         this.id = id;
         this.owner = null;
 
@@ -20,7 +24,7 @@ public class TodoList {
      * @param id - The ID of the list
      * @param owner - A reference to the {@code User} that owns the list
      */
-    public TodoList(int id, User owner){
+    public TodoList(String id, User owner){
         this.id = id;
         this.owner = owner;
 
@@ -44,6 +48,14 @@ public class TodoList {
     }
 
     /**
+     * Unlock an item on the list that is not being edited
+     * @param id - the id of the item
+     */
+    public void unlockItem(int id){
+        items.get(id).setLocked(false);
+    }
+
+    /**
      * Checks if an item is currently being edited
      * @param id - the id of the item
      * @return True if the item is being edited, false if it's not being edited.
@@ -59,7 +71,7 @@ public class TodoList {
      * Fetches the ID of the list
      * @return an int value
      */
-    public int getId(){
+    public String getId(){
         return id;
     }
 

@@ -1,10 +1,19 @@
 package org.academiadecodigo.hashtronauts.server.todolist;
 
-import java.util.LinkedList;
+import java.util.HashMap;
+import java.util.zip.CRC32;
 
 public class TodoListStore {
 
-    private LinkedList<TodoList> todoLists;
+    private HashMap<String, TodoList> todoLists;
+
+    /**
+     * Constructs a new instance of {@code TodoListStore}. Initializes a new HashMap that will contain all references
+     * of {@code TodoList}.
+     */
+    public TodoListStore(){
+        todoLists = new HashMap<>();
+    }
 
     /**
      * Fetches a TodoList by ID
@@ -12,10 +21,7 @@ public class TodoListStore {
      * @return a {@code TodoList} if it exists, or null if it doesn't exist
      */
     public TodoList getTodo(int id){
-        if( todoLists.size() < id ){
-            return todoLists.get(id);
-        }
-        return null;
+        return todoLists.get(id);
     }
 
     /**
@@ -36,12 +42,20 @@ public class TodoListStore {
      * Creates a new instance of {@code TodoList} and adds it to the HashMap property
      * @return a new instance of {@code TodoList}
      */
-    public TodoList createTodo(){
-        TodoList newList = new TodoList(todoLists.size() +1);
+    public TodoList createTodo(String id){
+        String newId = createTodoListID(id);
+        TodoList newList = new TodoList( newId );
 
-        todoLists.add( newList );
+        todoLists.put( newId, newList );
 
         return newList;
+    }
+
+    public String createTodoListID(String title){
+        CRC32 crc32 = new CRC32();
+        crc32.update(title.getBytes());
+
+        return Long.toHexString( crc32.getValue() );
     }
 
 }
