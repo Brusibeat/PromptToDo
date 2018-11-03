@@ -72,7 +72,8 @@ public class Communication {
         //Server
         SHUTDOWN(Method.POST, "shutdown", false),
         LOGIN(Method.POST, "login", true),
-        RESPONSE(Method.ACK, "ack", true);
+        RESPONSE(Method.ACK, "ack", true),
+        REGISTER(Method.POST, "register", true);
 
         private final Method method;
         private final String message;

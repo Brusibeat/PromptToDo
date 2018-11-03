@@ -8,6 +8,7 @@ import org.academiadecodigo.hashtronauts.client.menus.MenuItems;
 import org.academiadecodigo.hashtronauts.client.menus.Menus;
 import org.academiadecodigo.hashtronauts.client.others.ServerListener;
 import org.academiadecodigo.hashtronauts.client.utils.ClientMessages;
+import org.academiadecodigo.hashtronauts.comms.Communication;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -78,7 +79,7 @@ public class Client {
                     logoutUser();
                     break;
                 case REGISTER:
-                    System.out.println("I want to Register!");
+                    registerUser();
                     break;
             }
         }
@@ -96,16 +97,9 @@ public class Client {
      * Handles user login
      */
     private String loginUser() {
-        StringInputScanner usernameScanner = new StringInputScanner();
-        usernameScanner.setMessage("Username: ");
+        Credentials credentials = runCredentialsPrompt();
 
-        PasswordInputScanner passwordScanner = new PasswordInputScanner();
-        passwordScanner.setMessage("Password: ");
-
-        String username = prompt.getUserInput(usernameScanner);
-        String password = prompt.getUserInput(passwordScanner);
-
-        if (!Login.userLogin(serverListener, username, password)) {
+        if (!UserHelper.sendCommand(serverListener, Communication.Command.LOGIN, credentials.username, credentials.username)) {
             if (runConfirmationPrompt(ClientMessages.INVALID_CREDENTIALS.toString())){
                 return loginUser();
             } else {
@@ -118,10 +112,54 @@ public class Client {
         return username;
     }
 
+    /**
+     * Fake user logout, just set the username to null
+     */
     private void logoutUser() {
         username = null;
     }
 
+    /**
+     * Handles user registration on the server
+     */
+    private void registerUser() {
+        Credentials credentials = runCredentialsPrompt();
+
+        if (!UserHelper.sendCommand(serverListener, Communication.Command.REGISTER, credentials.username, credentials.username)) {
+            System.out.println(ClientMessages.REGISTER_FAIL.toString() + credentials.username);
+
+            if (runConfirmationPrompt(ClientMessages.INVALID_CREDENTIALS.toString())){
+                registerUser();
+            }
+        } else {
+            System.out.println(ClientMessages.REGISTER_SUCCESS + credentials.username);
+        }
+    }
+
+
+    /**
+     * Ask the user for username and password
+     * @return credentials with username and password
+     */
+    private Credentials runCredentialsPrompt() {
+        StringInputScanner usernameScanner = new StringInputScanner();
+        usernameScanner.setMessage("Username: ");
+
+        PasswordInputScanner passwordScanner = new PasswordInputScanner();
+        passwordScanner.setMessage("Password: ");
+
+        Credentials credentials = new Credentials();
+        credentials.username = prompt.getUserInput(usernameScanner);
+        credentials.password = prompt.getUserInput(passwordScanner);
+
+        return credentials;
+    }
+
+    /**
+     * Asks yes or no question
+     * @param message question to ask the user
+     * @return
+     */
     private boolean runConfirmationPrompt(String message) {
         Set<String> options = new HashSet<>();
         options.add("Y");
@@ -132,6 +170,14 @@ public class Client {
         StringSetInputScanner confirmationScanner = new StringSetInputScanner(options);
         confirmationScanner.setMessage(message + "? (Y/N)");
 
-        return prompt.getUserInput(confirmationScanner).toLowerCase().equals("y") ? true : false;
+        return prompt.getUserInput(confirmationScanner).toLowerCase().equals("y");
+    }
+
+    /**
+     * Simple credential info (username, password)
+     */
+    private class Credentials {
+        String username;
+        String password;
     }
 }

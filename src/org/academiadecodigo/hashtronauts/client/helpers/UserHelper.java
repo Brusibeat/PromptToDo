@@ -6,9 +6,17 @@ import org.academiadecodigo.hashtronauts.comms.Communication;
 
 import java.io.IOException;
 
-public class Login {
+public class UserHelper {
 
-    public static boolean userLogin(ServerListener server, String username, String password) {
+    /**
+     * Send user commands to the server (Login, Register)
+     * @param server
+     * @param command
+     * @param username
+     * @param password
+     * @return
+     */
+    public static boolean sendCommand(ServerListener server, Communication.Command command, String username, String password) {
         String receivedMessage = "";
         String[] args = {username, password};
 
