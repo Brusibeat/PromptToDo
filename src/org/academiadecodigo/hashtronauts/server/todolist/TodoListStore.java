@@ -1,6 +1,7 @@
 package org.academiadecodigo.hashtronauts.server.todolist;
 
 import org.academiadecodigo.hashtronauts.server.utils.FileSystem;
+import org.academiadecodigo.hashtronauts.server.utils.Utils;
 
 import java.util.HashMap;
 import java.util.zip.CRC32;
@@ -30,6 +31,7 @@ public class TodoListStore {
 
     /**
      * Loads {@code TodoList} from the file to the HashMap property
+     * @param fileName name of the file to load
      */
     public void loadTodos(String fileName){
         String codedName = Utils.getCRC32(fileName);
@@ -54,7 +56,8 @@ public class TodoListStore {
     }
 
     /**
-     * Saves {@code TodoList} from the HashMap property to a file
+     * Saves list and its items into a file
+     * @param fileName name of the list to save as a file
      */
     public void saveTodos(String fileName){
         String codedName = Utils.getCRC32( fileName );
@@ -71,7 +74,6 @@ public class TodoListStore {
         }
 
         FileSystem.saveFile( filePath, data.getBytes());
-
     }
 
     /**
@@ -79,7 +81,7 @@ public class TodoListStore {
      * @return a new instance of {@code TodoList}
      */
     public TodoList createTodo(String id){
-        String newId = createTodoListID(id);
+        String newId = Utils.getCRC32(id);
         TodoList newList = new TodoList( newId );
 
         todoLists.put( newId, newList );
@@ -87,11 +89,6 @@ public class TodoListStore {
         return newList;
     }
 
-    public String createTodoListID(String title){
-        CRC32 crc32 = new CRC32();
-        crc32.update(title.getBytes());
 
-        return Long.toHexString( crc32.getValue() );
-    }
 
 }
