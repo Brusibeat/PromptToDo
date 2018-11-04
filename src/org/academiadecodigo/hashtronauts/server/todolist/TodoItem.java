@@ -20,7 +20,10 @@ public class TodoItem {
         this.itemID = itemID;
         this.itemValue = "";
         this.locked = false;
+        this.editedBy = new User(-1, "Unspecified", 123);
+        this.editedDate = new Date();
     }
+
     /**
      * Constructs an instance of {@code TodoItem} with both ID and value defined
      * @param itemID the ID of the new item
@@ -30,6 +33,23 @@ public class TodoItem {
         this.itemID = itemID;
         this.itemValue = itemValue;
         this.locked = false;
+        this.editedBy = new User(-1, "Unspecified", 123);
+        this.editedDate = new Date();
+    }
+
+    /**
+     * Constructs an instance of {@code TodoItem} with all parameters received
+     * @param itemID - Id of the new Item
+     * @param itemValue - Value of the new item
+     * @param user - A reference of the user that created the item
+     * @param date - The date the item was created
+     */
+    public TodoItem(int itemID, String itemValue, User user, Date date){
+        this.itemID = itemID;
+        this.itemValue = itemValue;
+        this.locked = false;
+        this.editedBy = user;
+        this.editedDate = date;
     }
 
     /**
@@ -44,7 +64,7 @@ public class TodoItem {
      * Fetches the text of the item
      * @return a String
      */
-    public String getItemValue(){
+    public synchronized String getItemValue(){
         return itemValue;
     }
 
@@ -76,7 +96,7 @@ public class TodoItem {
      * Edits the item's value
      * @param value - The new value for this item
      */
-    public void setItemValue(String value){
+    public synchronized void setItemValue(String value){
         itemValue = value;
     }
 
