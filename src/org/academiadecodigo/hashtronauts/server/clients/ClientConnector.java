@@ -40,4 +40,8 @@ public class ClientConnector {
     public boolean getList(String name) {
         return server.getList(name);
     }
+
+    public boolean createItem(String listName, String itemText) {
+        return server.createItem(listName, itemText);
+    }
 }
