@@ -2,6 +2,8 @@ package org.academiadecodigo.hashtronauts.server;
 
 import org.academiadecodigo.hashtronauts.server.clients.Client;
 import org.academiadecodigo.hashtronauts.server.clients.ClientConnector;
+import org.academiadecodigo.hashtronauts.server.todolist.TodoList;
+import org.academiadecodigo.hashtronauts.server.todolist.TodoListStore;
 import org.academiadecodigo.hashtronauts.server.users.User;
 import org.academiadecodigo.hashtronauts.server.users.UserStore;
 import org.academiadecodigo.hashtronauts.server.utils.ServerMessages;
@@ -19,13 +21,14 @@ public class Server {
     private final Set<ClientConnector> clients;
     private final ExecutorService threadPool;
     private ServerSocket socket;
-
+    private final TodoListStore listStore;
     private final UserStore users;
 
     public Server() {
         users = new UserStore();
         clients = new HashSet<>();
         threadPool = Executors.newCachedThreadPool();
+        listStore = new TodoListStore();
     }
 
 
@@ -104,5 +107,12 @@ public class Server {
 
     public User registerUser(String username, int password) {
         return users.createUser(username, password);
+    }
+
+    public boolean createList(String name) {
+        listStore.createTodo(name);
+        listStore.saveTodos(name);
+
+        return true; //TODO: Exception handling should be done at this level.
     }
 }

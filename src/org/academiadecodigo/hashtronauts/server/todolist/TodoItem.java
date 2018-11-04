@@ -99,6 +99,9 @@ public class TodoItem {
         locked = lockState;
     }
 
-
+    @Override
+    public String toString(){
+        return String.format("%d:%s:%s:%s\n", itemID, editedBy, editedDate, itemValue);
+    }
 
 }

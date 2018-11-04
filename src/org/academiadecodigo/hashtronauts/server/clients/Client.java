@@ -94,7 +94,6 @@ public class Client implements Runnable {
         Command command = Communication.getCommandFromMessage(message);
 
         String[] args = message.split(" ")[2].split(",");
-        //POST register qwerty,123456
 
         String response;
         if (method == Method.POST) {
@@ -115,6 +114,11 @@ public class Client implements Runnable {
                         response = "false";
                     }
                     sendToClient(Communication.buildMessage(Command.RESPONSE, new String[]{response}));
+                    break;
+                case CREATE_LIST:
+                    Boolean result = serverBridge.createList(args[0]);
+                    sendToClient(Communication.buildMessage(Command.RESPONSE, new String[] {result.toString()}));
+                    break;
             }
         }
     }

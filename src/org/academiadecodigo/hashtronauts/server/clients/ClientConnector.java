@@ -32,4 +32,8 @@ public class ClientConnector {
     public User register(String username, int password) {
         return server.registerUser(username, password);
     }
+
+    public boolean createList(String name) {
+        return server.createList(name);
+    }
 }

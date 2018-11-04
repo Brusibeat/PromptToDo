@@ -5,6 +5,7 @@ import org.academiadecodigo.hashtronauts.server.utils.Utils;
 
 import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.zip.CRC32;
 
 public class TodoListStore {
@@ -69,17 +70,13 @@ public class TodoListStore {
         String codedName = Utils.getCRC32( fileName );
         String filePath = PATH + codedName + FILE_FORMAT;
 
-        String data = "";
-        TodoItem item;
-        for( int i = 0; i < todoLists.get( fileName ).getItems().size(); i++){
-            item = todoLists.get( fileName ).getItem(i);
-            data = item.getItemID() + ":";
-            data += item.getEditedBy() + ":";
-            data += item.getEditedDate() + ":";
-            data += item.getItemValue() + "\n";
+        StringBuilder data = new StringBuilder();
+
+        for (TodoItem item : todoLists.get(codedName).getItems().values()) {
+            data.append(item.toString());
         }
 
-        FileSystem.saveFile( filePath, data.getBytes());
+        FileSystem.saveFile( filePath, data.toString().getBytes());
     }
 
     /**
