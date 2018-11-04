@@ -94,7 +94,6 @@ public class Client implements Runnable {
         Command command = Communication.getCommandFromMessage(message);
 
         String[] args = message.split(" ")[2].split(",");
-        //POST register qwerty,123456
 
         String response;
         if (method == Method.POST) {

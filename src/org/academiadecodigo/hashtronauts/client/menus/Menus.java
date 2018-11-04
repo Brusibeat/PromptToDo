@@ -57,6 +57,7 @@ public class Menus {
      */
     public static MenuItems getTodoListsMenu(Prompt prompt){
         MenuItems[] menuItems = {
+                MenuItems.LIST_ITEMS,
                 MenuItems.CREATE_ITEM,
                 MenuItems.EDIT_ITEM,
                 MenuItems.BACK

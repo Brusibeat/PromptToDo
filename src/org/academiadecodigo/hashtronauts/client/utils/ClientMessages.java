@@ -24,11 +24,13 @@ public enum ClientMessages {
     //Login
     INVALID_CREDENTIALS("Invalid Credentials. Do you want to try again? (Y/N) "),
     LOGIN_SUCCESS("You logged in successfully as "),
-    ALREADY_LOGGEDIN("You already logged in as "),
-
     //Register
     REGISTER_SUCCESS("You registered successfully the username "),
     REGISTER_FAIL("You can't register the username "),
+
+    //TOD0 List Menu
+    CREATED_LIST("List Created!"),
+    ERROR_CREATING_LIST("Error Creating List!"),
 
     //Others
     DISCONNECTED("Disconnected from the Server!"),

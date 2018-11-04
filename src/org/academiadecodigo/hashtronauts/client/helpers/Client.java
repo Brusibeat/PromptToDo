@@ -1,6 +1,7 @@
 package org.academiadecodigo.hashtronauts.client.helpers;
 
 import org.academiadecodigo.bootcamp.Prompt;
+import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.PasswordInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.StringSetInputScanner;
@@ -107,8 +108,11 @@ public class Client {
                     todoTitle = createTodo();
 
                     if (todoTitle != null) {
+                        System.out.println(ClientMessages.CREATED_LIST);
                         showTodoListMenu();
+                        continue;
                     }
+                    System.out.println(ClientMessages.ERROR_CREATING_LIST);
                     break;
                 case LOGOUT:
                     logoutUser();
@@ -116,7 +120,6 @@ public class Client {
             }
         }
     }
-
 
     /**
      * Shows the t0d0 list menu
@@ -126,15 +129,33 @@ public class Client {
             MenuItems selectedMenu = Menus.getTodoListsMenu(prompt);
 
             switch(selectedMenu){
+                case LIST_ITEMS:
+                    listItems();
                 case CREATE_ITEM:
                     createItem();
                 case EDIT_ITEM:
                     editItem();
-                case LOGOUT:
-                    logoutUser();
-                    break;
+                case BACK:
+                    todoTitle = null;
+                    return;
             }
         }
+    }
+
+    private void listItems() {
+        serverListener.sendToServer(Communication.buildMessage(Communication.Command.LIST_ITEMS, new String[]{todoTitle}));
+
+        String message;
+        try {
+            message = serverListener.receiveFromServer();
+
+
+        } catch (IOException e) {
+            return;
+        }
+
+
+
     }
 
     /** Gets list from server */
@@ -151,7 +172,7 @@ public class Client {
         }
 
         if (Communication.getMethodFromMessage(message) == Communication.Method.ACK &&
-            Communication.getCommandFromMessage(message) == Communication.Command.GET_LIST) {
+            Communication.getCommandFromMessage(message) == Communication.Command.RESPONSE) {
             return title;
         }
 
@@ -164,11 +185,22 @@ public class Client {
 
         serverListener.sendToServer(Communication.buildMessage(Communication.Command.CREATE_LIST, new String[]{title}));
 
-        return title;
+        try {
+            String message = serverListener.receiveFromServer();
+
+            if (Boolean.valueOf(message.split(" ")[2])) {
+                return title;
+            }
+        } catch (IOException e) {
+            return null;
+        }
+
+        return null;
     }
 
     /** Edits a item */
     private void editItem() {
+
 
     }
 
@@ -187,9 +219,7 @@ public class Client {
         StringInputScanner todoListId = new StringInputScanner();
         todoListId.setMessage("List ID: ");
 
-        String todoId = prompt.getUserInput(todoListId);
-
-        return todoId;
+        return prompt.getUserInput(todoListId);
     }
 
 
