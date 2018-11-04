@@ -6,13 +6,19 @@ package org.academiadecodigo.hashtronauts.client.menus;
 public enum MenuItems {
     //Main Menu
     LOGIN("Login"),
-    LOGOUT("Logout"),
     REGISTER("Register"),
     EXIT("Exit"),
+
+
+    //User Menu
+    JOIN_LIST("Join List"),
+    CREATE_LIST("Create new List"),
+    LOGOUT("Logout"),
+
+    //T0d0 Menu
     CREATE_TODO("Create Todo List"),
     CREATE_ITEM("Create a Todo Item"),
     EDIT_ITEM("Edit a Todo Item");
-
 
     /**
      * The shown description at the menu
@@ -25,9 +31,6 @@ public enum MenuItems {
 
     /**
      * Gets all the descriptions of an MenuItems[]
-     * Usage ex:
-     *  MenuInputScanner menu = new MenuInputScanner(MenuItems.getItemsDescription(someArr[]))
-     *
      *
      * @param menuItems the MenuItem[]
      * @return all the descriptions

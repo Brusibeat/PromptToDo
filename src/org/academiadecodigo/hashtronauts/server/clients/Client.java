@@ -64,7 +64,7 @@ public class Client implements Runnable {
                 String message = receiveFromClient();
 
                 if (message == null) {
-                    return;
+                    break;
                 }
 
                 handleInput(message);
@@ -130,6 +130,10 @@ public class Client implements Runnable {
 
         while ((message = inputStream.readLine()) != null && !message.isEmpty()) {
             sb.append(message);
+        }
+
+        if (message == null) {
+            return null;
         }
 
         return sb.toString();

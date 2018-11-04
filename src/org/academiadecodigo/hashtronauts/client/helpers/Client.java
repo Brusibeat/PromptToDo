@@ -22,14 +22,12 @@ public class Client {
      * Client Prompt
      */
     private final Prompt prompt;
-    /**
-     * Connection to the server
-     */
+    /** Connection to the server */
     private ServerListener serverListener;
-    /**
-     * user logged status
-     */
+
+    /** User Username */
     private String username;
+
 
     public Client() {
         this.prompt = new Prompt(System.in, System.out);
@@ -64,23 +62,22 @@ public class Client {
             MenuItems selectedMenu = Menus.getMainMenu(prompt);
 
             switch (selectedMenu) {
-                case EXIT:
-                    System.out.println(ClientMessages.FAREWELL);
-                    exitPromptTodo();
-                    return;
                 case LOGIN:
                     if (username == null) {
-                       username = loginUser();
-                    } else {
-                        System.out.println(ClientMessages.ALREADY_LOGGEDIN.toString() + username);
+                        username = loginUser();
                     }
-                    break;
-                case LOGOUT:
-                    logoutUser();
+
+                    if (username != null) {
+                        showUserMenu();
+                    }
                     break;
                 case REGISTER:
                     registerUser();
                     break;
+                case EXIT:
+                    System.out.println(ClientMessages.FAREWELL);
+                    exitPromptTodo();
+                    return;
             }
         }
     }
@@ -125,16 +122,34 @@ public class Client {
     }
 
     /**
-     * Closes the connection to the server
+     * Shows the User Menu to the logged in user
      */
+    private void showUserMenu() {
+        while (true) {
+            MenuItems selectedMenu = Menus.getUserMenu(prompt);
+
+            switch (selectedMenu) {
+                case JOIN_LIST:
+                    System.out.println("Join a list");
+                    break;
+                case CREATE_LIST:
+                    System.out.println("Creating List");
+                    break;
+                case LOGOUT:
+                    logoutUser();
+                    return;
+            }
+
+        }
+    }
+
+    /** Closes the connection to the server */
     private void exitPromptTodo() {
         serverListener.close();
         System.exit(0);
     }
 
-    /**
-     * Handles user login
-     */
+    /** Handles user login */
     private String loginUser() {
         Credentials credentials = runCredentialsPrompt();
 
@@ -151,16 +166,7 @@ public class Client {
         return credentials.username;
     }
 
-    /**
-     * Fake user logout, just set the username to null
-     */
-    private void logoutUser() {
-        username = null;
-    }
-
-    /**
-     * Handles user registration on the server
-     */
+    /** Handles user registration on the server */
     private void registerUser() {
         Credentials credentials = runCredentialsPrompt();
 
@@ -173,6 +179,13 @@ public class Client {
         } else {
             System.out.println(ClientMessages.REGISTER_SUCCESS + credentials.username);
         }
+    }
+
+    /**
+     * Fake user logout, just set the username to null
+     */
+    private void logoutUser() {
+        username = null;
     }
 
 
@@ -212,9 +225,7 @@ public class Client {
         return prompt.getUserInput(confirmationScanner).toLowerCase().equals("y");
     }
 
-    /**
-     * Simple credential info (username, password)
-     */
+    /** Simple credential info (username, password) */
     private class Credentials {
         String username;
         String password;
