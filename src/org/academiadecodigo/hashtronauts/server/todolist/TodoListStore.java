@@ -15,7 +15,6 @@ public class TodoListStore {
     private HashMap<String, TodoList> todoLists;
     private final String PATH = "resources/lists/";
     private final String FILE_FORMAT = ".txt";
-    private final UserStore userStore = new UserStore();
 
     /**
      * Constructs a new instance of {@code TodoListStore}. Initializes a new HashMap that will contain all references
@@ -69,12 +68,7 @@ public class TodoListStore {
 
             for(int i = 0; i < items.length; i++){
                 itemData = items[i].split(":");
-                User user = userStore.getUser(itemData[1]);
-                if (user == null) {
-                    user = new User(0,"unknown",0);
-                }
-
-                todoList.createItem(Integer.parseInt(itemData[0]), itemData[3], user, Utils.parseFormatteDate(itemData[2]), Boolean.valueOf(itemData[4]));
+                todoList.createItem(Integer.parseInt(itemData[0]), itemData[3], new User(0,itemData[1],0), Utils.parseFormatteDate(itemData[2]), Boolean.valueOf(itemData[4]));
             }
 
         }
