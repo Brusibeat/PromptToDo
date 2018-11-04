@@ -113,7 +113,7 @@ public class TodoItem {
             editedBy = new User(0,"unknown",0);
         }
 
-        return String.format("%d:%s:%s:%s:%s\n", itemID, editedBy.getUsername(), Utils.getFormattedDate(editedDate), itemValue, Boolean.toString(todoDone));
+        return String.format("%d:%s:%s:%s:%s", itemID, editedBy.getUsername(), Utils.getFormattedDate(editedDate), itemValue, Boolean.toString(todoDone));
     }
 
 }

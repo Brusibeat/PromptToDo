@@ -34,6 +34,12 @@ public class TodoListStore {
         String codedName = Utils.getCRC32(name);
 
         if (!todoLists.containsKey(codedName)) {
+            String filePath = PATH + codedName + FILE_FORMAT;
+
+            if(!FileSystem.fileExists(filePath)) {
+                return null;
+            }
+
             loadTodos(name);
         }
 
@@ -90,6 +96,7 @@ public class TodoListStore {
 
             for (TodoItem item : todoList.getItems().values()) {
                 data.append(item.toString());
+                data.append('\n');
             }
 
             FileSystem.saveFile( filePath, data.toString().getBytes());

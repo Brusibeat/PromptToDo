@@ -68,6 +68,10 @@ public class FileSystem {
 
     }
 
+    public static boolean fileExists(String filePath) {
+        return new File(filePath).exists();
+    }
+
     /**
      * Clean up a file of data.
      * @param filePath
