@@ -116,8 +116,17 @@ public class Client implements Runnable {
                     sendToClient(Communication.buildMessage(Command.RESPONSE, new String[]{response}));
                     break;
                 case CREATE_LIST:
-                    Boolean result = serverBridge.createList(args[0]);
-                    sendToClient(Communication.buildMessage(Command.RESPONSE, new String[] {result.toString()}));
+                    Boolean createResult = serverBridge.createList(args[0]);
+                    sendToClient(Communication.buildMessage(Command.RESPONSE, new String[] {createResult.toString()}));
+                    break;
+            }
+        }
+
+        if (method == Method.GET) {
+            switch (command) {
+                case GET_LIST:
+                    Boolean getResult = serverBridge.getList(args[0]);
+                    sendToClient(Communication.buildMessage(Command.RESPONSE, new String[] {getResult.toString()}));
                     break;
             }
         }

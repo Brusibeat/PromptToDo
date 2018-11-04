@@ -36,4 +36,8 @@ public class ClientConnector {
     public boolean createList(String name) {
         return server.createList(name);
     }
+
+    public boolean getList(String name) {
+        return server.getList(name);
+    }
 }

@@ -115,4 +115,8 @@ public class Server {
 
         return true; //TODO: Exception handling should be done at this level.
     }
+
+    public boolean getList(String name) {
+        return listStore.getTodo(name) != null;
+    }
 }

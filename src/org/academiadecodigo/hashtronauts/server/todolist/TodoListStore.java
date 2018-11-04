@@ -11,7 +11,7 @@ import java.util.zip.CRC32;
 public class TodoListStore {
 
     private HashMap<String, TodoList> todoLists;
-    private final String PATH = "resources/";
+    private final String PATH = "resources/lists/";
     private final String FILE_FORMAT = ".txt";
 
     /**
@@ -24,11 +24,11 @@ public class TodoListStore {
 
     /**
      * Fetches a TodoList by ID
-     * @param id - the ID of the requested list
+     * @param name - the name of the requested list
      * @return a {@code TodoList} if it exists, or null if it doesn't exist
      */
-    public TodoList getTodo(int id){
-        return todoLists.get(id);
+    public TodoList getTodo(String name){
+        return todoLists.get(Utils.getCRC32(name));
     }
 
     /**
