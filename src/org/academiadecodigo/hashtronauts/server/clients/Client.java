@@ -126,10 +126,12 @@ public class Client implements Runnable {
                     sendToClient(Communication.buildMessage(Command.RESPONSE, new String[]{createItemResult.toString()}));
                     break;
                 case EDIT_ITEM:
-                    String updatedItemValue = serverBridge.updateItem(args[0], Integer.valueOf(args[1]), args[2],
-                            Boolean.parseBoolean(args[3]), user, new Date());
+                    String updatedItemValue = serverBridge.updateItem(args[0], Integer.valueOf(args[1]), args[2], user, new Date());
                     sendToClient(Communication.buildMessage(Command.RESPONSE, new String[]{updatedItemValue}));
                     break;
+                case MARK_DONE:
+                    Boolean itemToMark = serverBridge.markItem(args[0], Integer.valueOf(args[1]), user );
+                    sendToClient(Communication.buildMessage(Command.RESPONSE, new String[]{itemToMark.toString()} ));
             }
         }
 

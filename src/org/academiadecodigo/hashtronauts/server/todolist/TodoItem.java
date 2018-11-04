@@ -15,47 +15,19 @@ public class TodoItem {
     private boolean todoDone;
 
     /**
-     * Constructs an instance of {@code TodoItem} with ID defined
-     * @param itemID - The ID of the new item
-     */
-    public TodoItem(int itemID){
-        this.itemID = itemID;
-        this.itemValue = "";
-        this.locked = false;
-        this.editedBy = new User(-1, "Unspecified", 123);
-        this.editedDate = new Date();
-        this.todoDone = false;
-    }
-
-    /**
-     * Constructs an instance of {@code TodoItem} with both ID and value defined
-     * @param itemID the ID of the new item
-     * @param itemValue the value of the new item
-     */
-    public TodoItem(int itemID, String itemValue){
-        this.itemID = itemID;
-        this.itemValue = itemValue;
-        this.locked = false;
-        this.editedBy = new User(-1, "Unspecified", 123);
-        this.editedDate = new Date();
-        this.todoDone = false;
-    }
-
-    /**
      * Constructs an instance of {@code TodoItem} with all parameters received
-     *
-     * @param itemID    - Id of the new Item
+     * @param itemID - Id of the new Item
      * @param itemValue - Value of the new item
-     * @param user      - A reference of the user that created the item
-     * @param date      - The date the item was created
+     * @param user - A reference of the user that created the item
+     * @param date - The date the item was created
      */
-    public TodoItem(int itemID, String itemValue, User user, Date date) {
+    public TodoItem(int itemID, String itemValue, User user, Date date, boolean todoDone){
         this.itemID = itemID;
         this.itemValue = itemValue;
         this.locked = false;
         this.editedBy = user;
         this.editedDate = date;
-        this.todoDone = false;
+        this.todoDone = todoDone;
     }
 
     /**
@@ -129,13 +101,19 @@ public class TodoItem {
         locked = lockState;
     }
 
-    public void setDone(boolean state){
+    public synchronized void setDone(boolean state, User editor){
+        editedBy = editor;
+        editedDate = new Date();
         todoDone = state;
     }
 
     @Override
     public String toString(){
-        return String.format("%d:%s:%s:%s\n", itemID, editedBy.getUsername(), Utils.getFormattedDate(editedDate), itemValue);
+        if (editedBy == null) {
+            editedBy = new User(0,"unknown",0);
+        }
+
+        return String.format("%d:%s:%s:%s:%s", itemID, editedBy.getUsername(), Utils.getFormattedDate(editedDate), itemValue, Boolean.toString(todoDone));
     }
 
 }

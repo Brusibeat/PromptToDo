@@ -52,7 +52,11 @@ public class ClientConnector {
         return server.getTodoList(name);
     }
 
-    public String updateItem(String listName, int itemId, String newValue,  boolean state, User user, Date date) {
-        return server.updateItem(listName, itemId, newValue, state, user, date);
+    public String updateItem(String listName, int itemId, String newValue, User user, Date date) {
+        return server.updateItem(listName, itemId, newValue, user, date);
+    }
+
+    public boolean markItem(String listName, int itemId, User user){
+        return server.markItemAsDone(listName, itemId, user);
     }
 }

@@ -77,7 +77,8 @@ public class Communication {
         GET_LIST(Method.GET, "getList", true),
         CREATE_ITEM(Method.POST, "createItem", true),
         EDIT_ITEM(Method.POST, "editItem", true),
-        LIST_ITEMS(Method.GET, "listItems", true);
+        LIST_ITEMS(Method.GET, "listItems", true),
+        MARK_DONE(Method.POST, "markDone", true);
 
         private final Method method;
         private final String message;

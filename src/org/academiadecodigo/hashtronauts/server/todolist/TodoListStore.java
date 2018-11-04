@@ -1,5 +1,7 @@
 package org.academiadecodigo.hashtronauts.server.todolist;
 
+import org.academiadecodigo.hashtronauts.server.users.User;
+import org.academiadecodigo.hashtronauts.server.users.UserStore;
 import org.academiadecodigo.hashtronauts.server.utils.FileSystem;
 import org.academiadecodigo.hashtronauts.server.utils.Utils;
 
@@ -10,6 +12,7 @@ public class TodoListStore {
     private HashMap<String, TodoList> todoLists;
     private final String PATH = "resources/lists/";
     private final String FILE_FORMAT = ".txt";
+    private final UserStore userStore = new UserStore();
 
     /**
      * Constructs a new instance of {@code TodoListStore}. Initializes a new HashMap that will contain all references
@@ -28,6 +31,12 @@ public class TodoListStore {
         String codedName = Utils.getCRC32(name);
 
         if (!todoLists.containsKey(codedName)) {
+            String filePath = PATH + codedName + FILE_FORMAT;
+
+            if(!FileSystem.fileExists(filePath)) {
+                return null;
+            }
+
             loadTodos(name);
         }
 
@@ -48,7 +57,7 @@ public class TodoListStore {
             byte[] data = new byte[0];
             data = FileSystem.loadFile(filePath);
 
-            if (data == null) {
+            if (data.length <= 0 ) {
                 return;
             }
 
@@ -57,8 +66,12 @@ public class TodoListStore {
 
             for (int i = 0; i < items.length; i++) {
                 itemData = items[i].split(":");
+                User user = userStore.getUser(itemData[1]);
+                if (user == null) {
+                    user = new User(0,"unknown",0);
+                }
 
-                todoList.createItem(Integer.parseInt(itemData[0]), itemData[3]);
+                todoList.createItem(Integer.parseInt(itemData[0]), itemData[3], user, Utils.parseFormatteDate(itemData[2]), Boolean.valueOf(itemData[4]));
             }
 
         }
@@ -80,6 +93,7 @@ public class TodoListStore {
 
             for (TodoItem item : todoList.getItems().values()) {
                 data.append(item.toString());
+                data.append('\n');
             }
 
             FileSystem.saveFile(filePath, data.toString().getBytes());
