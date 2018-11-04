@@ -10,7 +10,10 @@
         <property name="build.dir" value="build"/>
         <property name="classes.dir" value="${build.dir}/classes"/>
         <property name="lib.dir" value="lib"/>
+        <property name="dist.dir" value="dist"/>
         <property name="resources.dir" value="resources"/>
+        <property name="serverjar.name" value="${project.name} - Server.jar"/>
+        <property name="clientjar.name" value="${project.name} - Client.jar"/>
         <path id="classpath">
             <fileset dir="${lib.dir}" includes="**/*.jar"/>
         </path>
@@ -35,7 +38,7 @@
 
     <!-- Creates a JAR for the client file -->
     <target name="clientJar" description="Archives the code for the client" depends="compile">
-        <jar destfile="${build.dir}/${project.name} - Client.jar" basedir="${classes.dir}">
+        <jar destfile="${build.dir}/${clientjar.name}" basedir="${classes.dir}">
             <manifest>
                 <attribute name="Main-Class" value="${ClientMain.class}"/>
                 <attribute name="Class-Path" value="${lib.dir}"/>
@@ -46,7 +49,7 @@
 
     <!-- Creates a JAR for the Server file -->
     <target name="serverJar" description="Archives the code for the client" depends="compile">
-        <jar destfile="${build.dir}/${project.name} - Server.jar" basedir="${classes.dir}">
+        <jar destfile="${build.dir}/${serverjar.name}" basedir="${classes.dir}">
             <manifest>
                 <attribute name="Main-Class" value="${ServerMain.class}"/>
                 <attribute name="Class-Path" value="${lib.dir}"/>
@@ -55,4 +58,11 @@
         </jar>
     </target>
 
+    <!-- distributes Jars -->
+    <target name="distribute" description="Creates a dist folder and copies jars" depends="serverJar,clientJar">
+        <mkdir dir="${dist.dir}"/>
+        <move file="${build.dir}/${serverjar.name}" tofile="${dist.dir}/${serverjar.name}"/>
+        <move file="${build.dir}/${clientjar.name}" tofile="${dist.dir}/${clientjar.name}"/>
+        <delete dir="${build.dir}"/>
+    </target>
 </project>
