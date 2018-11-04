@@ -1,6 +1,7 @@
 package org.academiadecodigo.hashtronauts.server.todolist;
 
 import org.academiadecodigo.hashtronauts.server.users.User;
+import org.academiadecodigo.hashtronauts.server.utils.Utils;
 
 import java.util.Date;
 
@@ -133,7 +134,7 @@ public class TodoItem {
 
     @Override
     public String toString(){
-        return String.format("%d:%s:%s:%s\n", itemID, editedBy, editedDate, itemValue);
+        return String.format("%d:%s:%s:%s\n", itemID, editedBy, Utils.getFormattedDate(editedDate), itemValue);
     }
 
 }
