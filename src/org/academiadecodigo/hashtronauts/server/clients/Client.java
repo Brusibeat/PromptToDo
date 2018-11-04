@@ -128,6 +128,10 @@ public class Client implements Runnable {
                     Boolean getResult = serverBridge.getList(args[0]);
                     sendToClient(Communication.buildMessage(Command.RESPONSE, new String[] {getResult.toString()}));
                     break;
+                case LIST_ITEMS:
+                    String[] items = serverBridge.getTodoList(args[0]).getAllItems();
+                    sendToClient(Communication.buildMessage(Command.RESPONSE, items));
+                    break;
             }
         }
     }

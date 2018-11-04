@@ -1,6 +1,7 @@
 package org.academiadecodigo.hashtronauts.server.clients;
 
 import org.academiadecodigo.hashtronauts.server.Server;
+import org.academiadecodigo.hashtronauts.server.todolist.TodoList;
 import org.academiadecodigo.hashtronauts.server.users.User;
 
 
@@ -39,5 +40,9 @@ public class ClientConnector {
 
     public boolean getList(String name) {
         return server.getList(name);
+    }
+
+    public TodoList getTodoList(String name){
+        return server.getTodoList(name);
     }
 }

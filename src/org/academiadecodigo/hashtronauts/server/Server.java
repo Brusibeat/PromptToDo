@@ -119,4 +119,8 @@ public class Server {
     public boolean getList(String name) {
         return listStore.getTodo(name) != null;
     }
+
+    public TodoList getTodoList(String name){
+        return listStore.getTodo(name);
+    }
 }

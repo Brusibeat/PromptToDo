@@ -122,4 +122,14 @@ public class TodoList {
         return newItem;
     }
 
+    public String[] getAllItems(){
+        String[] itemList = new String[items.size()];
+        int i = 0;
+        for( TodoItem item : items.values()){
+            itemList[i] = item.getItemValue();
+            i++;
+        }
+        return itemList;
+    }
+
 }
