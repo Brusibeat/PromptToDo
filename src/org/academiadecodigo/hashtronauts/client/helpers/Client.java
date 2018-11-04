@@ -28,6 +28,10 @@ public class Client {
     /** User Username */
     private String username;
 
+    /**
+     * Current T0d0
+     */
+    private String todoTitle;
 
     public Client() {
         this.prompt = new Prompt(System.in, System.out);
@@ -82,13 +86,47 @@ public class Client {
         }
     }
 
-    public void startTodoListsMenu() {
+    /**
+     * Shows the User Menu to the logged in user
+     */
+    private void showUserMenu() {
+        while (true) {
+            MenuItems selectedMenu = Menus.getUserMenu(prompt);
+
+            switch (selectedMenu) {
+                case JOIN_LIST:
+                    if (todoTitle == null) {
+                        todoTitle = getList();
+                    }
+
+                    if (todoTitle != null) {
+                        showTodoListMenu();
+                    }
+                    break;
+                case CREATE_LIST:
+                    todoTitle = createTodo();
+
+                    if (todoTitle != null) {
+                        showTodoListMenu();
+                    }
+                    break;
+                case LOGOUT:
+                    logoutUser();
+                    return;
+            }
+
+        }
+    }
+
+
+    /**
+     * Shows the t0d0 list menu
+     */
+    public void showTodoListMenu() {
         while(true){
             MenuItems selectedMenu = Menus.getTodoListsMenu(prompt);
 
             switch(selectedMenu){
-                case CREATE_TODO:
-                    createTodo();
                 case CREATE_ITEM:
                     createItem();
                 case EDIT_ITEM:
@@ -98,6 +136,25 @@ public class Client {
                     break;
             }
         }
+    }
+
+    private String getList() {
+        String title = getListTitleScanner();
+
+        serverListener.sendToServer(Communication.buildMessage(Communication.Command.GET_LIST, new String[]{title}));
+
+        String message;
+        try {
+            message = serverListener.receiveFromServer();
+        } catch (IOException e) {
+            return null;
+        }
+
+        if (Communication.getMethodFromMessage(message) == Communication.Method.ACK) {
+            //TODO: Finish this
+        }
+
+        return null;
     }
 
     private void editItem() {
@@ -113,35 +170,16 @@ public class Client {
 
     }
 
-    private void createTodo() {
+    private String getListTitleScanner() {
         StringInputScanner todoListId = new StringInputScanner();
         todoListId.setMessage("List ID: ");
 
         String todoId = prompt.getUserInput(todoListId);
 
+        return todoId;
     }
 
-    /**
-     * Shows the User Menu to the logged in user
-     */
-    private void showUserMenu() {
-        while (true) {
-            MenuItems selectedMenu = Menus.getUserMenu(prompt);
 
-            switch (selectedMenu) {
-                case JOIN_LIST:
-                    System.out.println("Join a list");
-                    break;
-                case CREATE_LIST:
-                    System.out.println("Creating List");
-                    break;
-                case LOGOUT:
-                    logoutUser();
-                    return;
-            }
-
-        }
-    }
 
     /** Closes the connection to the server */
     private void exitPromptTodo() {

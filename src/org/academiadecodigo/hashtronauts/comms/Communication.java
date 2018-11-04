@@ -75,6 +75,7 @@ public class Communication {
         RESPONSE(Method.ACK, "ack", true),
         REGISTER(Method.POST, "register", true),
         CREATE_LIST(Method.POST, "createList", true),
+        GET_LIST(Method.GET, "getList", true),
         CREATE_ITEM(Method.POST, "createItem", true),
         EDIT_ITEM(Method.POST, "editItem", true);
 
