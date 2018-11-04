@@ -64,7 +64,7 @@ public class TodoItem {
      * Fetches the text of the item
      * @return a String
      */
-    public String getItemValue(){
+    public synchronized String getItemValue(){
         return itemValue;
     }
 
@@ -96,7 +96,7 @@ public class TodoItem {
      * Edits the item's value
      * @param value - The new value for this item
      */
-    public void setItemValue(String value){
+    public synchronized void setItemValue(String value){
         itemValue = value;
     }
 

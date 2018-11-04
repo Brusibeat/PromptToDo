@@ -51,4 +51,8 @@ public class ClientConnector {
     public TodoList getTodoList(String name){
         return server.getTodoList(name);
     }
+
+    public String updateItem(String listName, int itemId, String newValue) {
+        return server.updateItem(listName, itemId, newValue);
+    }
 }
