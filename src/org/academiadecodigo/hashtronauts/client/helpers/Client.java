@@ -168,7 +168,7 @@ public class Client {
                 return;
             }
 
-            System.out.println("Error marking item.");
+            System.out.println("Error marking item or invalid number.");
         } catch (IOException e) {
             return;
         }

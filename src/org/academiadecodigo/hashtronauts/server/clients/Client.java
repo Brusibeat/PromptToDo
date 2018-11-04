@@ -127,7 +127,7 @@ public class Client implements Runnable {
                     break;
                 case EDIT_ITEM:
                     String updatedItemValue = serverBridge.updateItem(args[0], Integer.valueOf(args[1]), args[2], user, new Date());
-                    sendToClient(Communication.buildMessage(Command.RESPONSE, new String[]{updatedItemValue}));
+                    sendToClient(Communication.buildMessage(Command.RESPONSE, new String[]{updatedItemValue == null ? "false" : "true"}));
                     break;
                 case MARK_DONE:
                     Boolean itemToMark = serverBridge.markItem(args[0], Integer.valueOf(args[1]), user );

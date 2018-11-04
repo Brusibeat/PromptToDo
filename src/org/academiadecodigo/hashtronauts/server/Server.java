@@ -2,6 +2,7 @@ package org.academiadecodigo.hashtronauts.server;
 
 import org.academiadecodigo.hashtronauts.server.clients.Client;
 import org.academiadecodigo.hashtronauts.server.clients.ClientConnector;
+import org.academiadecodigo.hashtronauts.server.todolist.TodoItem;
 import org.academiadecodigo.hashtronauts.server.todolist.TodoList;
 import org.academiadecodigo.hashtronauts.server.todolist.TodoListStore;
 import org.academiadecodigo.hashtronauts.server.users.User;
@@ -138,6 +139,10 @@ public class Server {
     public String updateItem(String listName, int itemId, String newValue, User user, Date date) {
         TodoList todoList = listStore.getTodo(listName);
 
+        if (todoList.getItem(itemId) == null ) {
+            return null;
+        }
+
         todoList.updateItem(itemId, newValue, user, date);
 
         listStore.saveTodos(listName);
@@ -149,7 +154,13 @@ public class Server {
     public boolean markItemAsDone(String listName, int itemId, User user){
         TodoList todoList = listStore.getTodo(listName);
 
-        todoList.getItem(itemId).setDone(true, user);
+        TodoItem todoItem = todoList.getItem(itemId);
+
+        if (todoItem == null ) {
+            return false;
+        }
+
+        todoItem.setDone(true, user);
         listStore.saveTodos(listName);
         listStore.loadTodos(listName);
 
