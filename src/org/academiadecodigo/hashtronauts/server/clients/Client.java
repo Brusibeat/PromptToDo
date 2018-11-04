@@ -17,17 +17,25 @@ import static org.academiadecodigo.hashtronauts.comms.Communication.*;
  */
 public class Client implements Runnable {
 
-    /** Connection to the client */
+    /**
+     * Connection to the client
+     */
     private final Socket clientSocket;
 
-    /** Client Streams */
+    /**
+     * Client Streams
+     */
     private PrintWriter outputStream;
     private BufferedReader inputStream;
 
-    /** Connection to the server */
+    /**
+     * Connection to the server
+     */
     private ClientConnector serverBridge;
 
-    /** Associated user to this client */
+    /**
+     * Associated user to this client
+     */
     private User user;
 
     public Client(Socket socket) {
@@ -70,7 +78,8 @@ public class Client implements Runnable {
                 handleInput(message);
 
             } catch (IOException e) {
-                e.printStackTrace();
+               // e.printStackTrace();
+                disconnect();
             }
         }
         System.out.println(ServerMessages.CLIENT_DISCONNECTED);
@@ -102,7 +111,7 @@ public class Client implements Runnable {
                 case LOGIN:
                     user = serverBridge.login(args[0], args[1].hashCode());
                     response = "true";
-                    if (user == null ){
+                    if (user == null) {
                         response = "false";
                     }
                     sendToClient(Communication.buildMessage(Command.RESPONSE, new String[]{response}));
@@ -128,13 +137,14 @@ public class Client implements Runnable {
         StringBuilder sb = new StringBuilder();
         String message;
 
+
         while ((message = inputStream.readLine()) != null && !message.isEmpty()) {
             sb.append(message);
         }
-
         if (message == null) {
             return null;
         }
+
 
         return sb.toString();
     }
