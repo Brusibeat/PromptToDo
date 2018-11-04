@@ -31,6 +31,7 @@ public enum ClientMessages {
     //TOD0 List Menu
     CREATED_LIST("List Created!"),
     ERROR_CREATING_LIST("Error Creating List!"),
+    LIST_NOT_FOUND("List not found"),
 
     //Others
     DISCONNECTED("Disconnected from the Server!"),

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 
 import static org.academiadecodigo.hashtronauts.comms.Communication.*;
 
@@ -141,8 +142,12 @@ public class Client implements Runnable {
         StringBuilder sb = new StringBuilder();
         String message;
 
-        while ((message = inputStream.readLine()) != null && !message.isEmpty()) {
-            sb.append(message);
+        try {
+            while ((message = inputStream.readLine()) != null && !message.isEmpty()) {
+                sb.append(message);
+            }
+        } catch (SocketException ex) {
+            return null;
         }
 
         if (message == null) {

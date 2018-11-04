@@ -1,7 +1,6 @@
 package org.academiadecodigo.hashtronauts.client.helpers;
 
 import org.academiadecodigo.bootcamp.Prompt;
-import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.PasswordInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.StringSetInputScanner;
@@ -102,7 +101,10 @@ public class Client {
 
                     if (todoTitle != null) {
                         showTodoListMenu();
+                        continue;
                     }
+
+                    System.out.println(ClientMessages.LIST_NOT_FOUND);
                     break;
                 case CREATE_LIST:
                     todoTitle = createTodo();
@@ -131,10 +133,13 @@ public class Client {
             switch(selectedMenu){
                 case LIST_ITEMS:
                     listItems();
+                    break;
                 case CREATE_ITEM:
                     createItem();
+                    break;
                 case EDIT_ITEM:
                     editItem();
+                    break;
                 case BACK:
                     todoTitle = null;
                     return;
@@ -149,6 +154,26 @@ public class Client {
         try {
             message = serverListener.receiveFromServer();
 
+            String args = "";
+            String[] parts = message.split(" ");
+
+            for (int i = 2; i < parts.length; i++) {
+                args += parts[i];
+            }
+
+            if (parts.length < 3) {
+                System.out.println("No item in list: " + todoTitle);
+                return;
+            }
+
+            int itemsNum = 1;
+
+            System.out.println("Listing items in " + todoTitle + "\n");
+
+            for (String item : args.split(",")) {
+                System.out.println("#" + itemsNum + " - " + item);
+                itemsNum++;
+            }
 
         } catch (IOException e) {
             return;
@@ -173,7 +198,9 @@ public class Client {
 
         if (Communication.getMethodFromMessage(message) == Communication.Method.ACK &&
             Communication.getCommandFromMessage(message) == Communication.Command.RESPONSE) {
-            return title;
+            if (Boolean.valueOf(message.split(" ")[2])) {
+                return title;
+            }
         }
 
         return null;
@@ -211,7 +238,19 @@ public class Client {
 
         String itemValue = prompt.getUserInput(todoItemScanner);
 
-        serverListener.sendToServer(Communication.buildMessage(Communication.Command.CREATE_ITEM, new String[]{itemValue}));
+        serverListener.sendToServer(Communication.buildMessage(Communication.Command.CREATE_ITEM, new String[]{todoTitle, itemValue}));
+
+        try {
+            String message = serverListener.receiveFromServer();
+
+            if (Boolean.valueOf(message.split(" ")[2])) {
+                System.out.println("Item Created");
+                return;
+            }
+
+            System.out.println("Error creating item");
+        } catch (IOException e) {
+        }
     }
 
     /** PromptView Scanner to get List ID */

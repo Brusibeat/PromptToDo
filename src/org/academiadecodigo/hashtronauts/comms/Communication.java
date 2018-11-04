@@ -26,7 +26,6 @@ public class Communication {
             }
         }
 
-
         return method + " " + cmd + " " + arguments+"\n";
     }
 

@@ -76,10 +76,11 @@ public class UserStore {
     public User validateUser(String username, int password) {
         User user = getUser(username);
         if (user == null ){
-            return loadUser(username);
+            user = loadUser(username);
         }
 
-        if (user.validPassword(password)) {
+        if (user != null && user.validPassword(password)) {
+            users.add(user);
             return user;
         }
         return null;
@@ -119,6 +120,7 @@ public class UserStore {
         if (userInfo.length != 3) {
             return null;
         }
+
 
         if (userInfo[1].equals(username)) {
             return new User(Integer.parseInt(userInfo[0]), userInfo[1], Integer.parseInt(userInfo[2]));
