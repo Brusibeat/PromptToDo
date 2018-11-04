@@ -120,6 +120,16 @@ public class Server {
         return listStore.getTodo(name) != null;
     }
 
+    public boolean createItem(String listName, String itemText) {
+        TodoList list = listStore.getTodo(listName);
+
+        list.createItem(list.getItems().size() + 1, itemText);
+        listStore.saveTodos(listName);
+
+        return true;
+
+    }
+
     public TodoList getTodoList(String name){
         return listStore.getTodo(name);
     }

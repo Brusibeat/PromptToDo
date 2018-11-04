@@ -119,6 +119,10 @@ public class Client implements Runnable {
                     Boolean createResult = serverBridge.createList(args[0]);
                     sendToClient(Communication.buildMessage(Command.RESPONSE, new String[] {createResult.toString()}));
                     break;
+                case CREATE_ITEM:
+                    Boolean createItemResult = serverBridge.createItem(args[0], args[1]);
+                    sendToClient(Communication.buildMessage(Command.RESPONSE, new String[] {createItemResult.toString()}));
+                    break;
             }
         }
 
