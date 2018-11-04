@@ -1,9 +1,6 @@
 package org.academiadecodigo.hashtronauts.server.utils;
 
-import java.text.DateFormat;
-import java.text.FieldPosition;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
+import java.text.*;
 import java.util.Date;
 import java.util.zip.CRC32;
 
@@ -20,5 +17,17 @@ public class Utils {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH.mm");
 
         return dateFormat.format(date).toString();
+    }
+
+    public static Date parseFormatteDate(String formattedDate) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH.mm");
+        Date date = null;
+        try {
+           date = dateFormat.parse(formattedDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return date;
     }
 }

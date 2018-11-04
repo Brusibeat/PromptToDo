@@ -104,25 +104,25 @@ public class TodoList {
         return items.get(itemId);
     }
 
-    /**
-     * Creates a new item for the list
-     * @return a {@code TodoItem}
-     */
-    public TodoItem createItem(){
-        TodoItem newItem = new TodoItem(items.size() + 1);
-
-        items.put(items.size() +1, newItem);
-
-        return newItem;
-    }
-
-    public TodoItem createItem(int id, String value){
-        TodoItem newItem = new TodoItem(id, value);
-
-        items.put(id, newItem);
-
-        return newItem;
-    }
+//    /**
+//     * Creates a new item for the list
+//     * @return a {@code TodoItem}
+//     */
+//    public TodoItem createItem(){
+//        TodoItem newItem = new TodoItem(items.size() + 1);
+//
+//        items.put(items.size() +1, newItem);
+//
+//        return newItem;
+//    }
+//
+//    public TodoItem createItem(int id, String value, User user, Date date, boolean todoDone){
+//        TodoItem newItem = new TodoItem(id, value, user, date, todoDone );
+//
+//        items.put(id, newItem);
+//
+//        return newItem;
+//    }
 
     /**
      * Create a new T0D0 item, with the received parameters
@@ -132,8 +132,8 @@ public class TodoList {
      * @param date - the date it was created
      * @return the created item
      */
-    public TodoItem createItem(int id, String value, User user, Date date){
-        TodoItem newItem = new TodoItem(id, value, user, date);
+    public TodoItem createItem(int id, String value, User user, Date date, boolean todoDone){
+        TodoItem newItem = new TodoItem(id, value, user, date, todoDone);
 
         items.put(id, newItem);
 
@@ -154,10 +154,9 @@ public class TodoList {
         return itemList;
     }
 
-    public void updateItem(int id, String value, boolean todoState, User user, Date date) {
+    public void updateItem(int id, String value, User user, Date date) {
         items.get(id).setItemValue(value);
         items.get(id).setEdited(user, date);
-        items.get(id).setDone(todoState);
     }
 
 }
