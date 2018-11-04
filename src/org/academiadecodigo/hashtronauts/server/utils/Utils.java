@@ -10,4 +10,8 @@ public class Utils {
 
         return Long.toHexString( crc32.getValue() );
     }
+
+    public static String padRight(String str, int n){
+        return String.format("%1$-" + n + "s", str);
+    }
 }

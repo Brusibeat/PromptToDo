@@ -174,4 +174,14 @@ public class Client implements Runnable {
         } catch (IOException e) {
         }
     }
+
+
+
+    public User getUser(){
+        return this.user;
+    }
+
+    public String getAddress(){
+        return clientSocket.getInetAddress().getHostAddress();
+    }
 }

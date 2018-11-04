@@ -5,6 +5,7 @@ import org.academiadecodigo.hashtronauts.server.clients.ClientConnector;
 import org.academiadecodigo.hashtronauts.server.users.User;
 import org.academiadecodigo.hashtronauts.server.users.UserStore;
 import org.academiadecodigo.hashtronauts.server.utils.ServerMessages;
+import org.academiadecodigo.hashtronauts.server.utils.Utils;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -96,6 +97,22 @@ public class Server {
 
         System.out.println(ServerMessages.SERVER_CLOSING);
         System.exit(0);
+    }
+
+
+    public void listAllConnections() {
+        String output;
+
+        output = Utils.padRight("USER", 10) + Utils.padRight("IP", 10);
+
+        System.out.println(output);
+
+        for (ClientConnector client : clients) {
+            output = Utils.padRight(client.getClient().getUser().getUsername(), 10);
+            output += Utils.padRight(client.getClient().getAddress(), 10);
+            System.out.println(output);
+
+        }
     }
 
     public User LoginUser(String user, int password) {

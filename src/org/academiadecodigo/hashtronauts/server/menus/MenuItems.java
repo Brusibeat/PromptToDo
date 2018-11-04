@@ -5,6 +5,7 @@ package org.academiadecodigo.hashtronauts.server.menus;
  */
 public enum MenuItems {
     //Main Menu
+    LISTALLCONNECTIONS("List all connecetions"),
     SHUTDOWN("Exit");
 
     /**

@@ -22,9 +22,14 @@ public class ServerPrompt implements Runnable {
 
         MenuItems menuItem = Menus.getMainMenu(prompt);
 
-        if (menuItem == MenuItems.SHUTDOWN) {
-            server.shutdown();
-            return;
+        switch (menuItem) {
+            case LISTALLCONNECTIONS:
+                server.listAllConnections();
+                run();
+                break;
+            case SHUTDOWN:
+                server.shutdown();
+                break;
         }
     }
 }
