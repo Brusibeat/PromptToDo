@@ -133,4 +133,15 @@ public class Server {
     public TodoList getTodoList(String name){
         return listStore.getTodo(name);
     }
+
+    public String updateItem(String listName, int itemId, String newValue) {
+        TodoList todoList = listStore.getTodo(listName);
+
+        todoList.updateItem(itemId, newValue);
+
+        listStore.saveTodos(listName);
+        listStore.loadTodos(listName);
+
+        return todoList.getItem(itemId).getItemValue();
+    }
 }

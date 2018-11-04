@@ -132,4 +132,8 @@ public class TodoList {
         return itemList;
     }
 
+    public void updateItem(int id, String value) {
+        items.get(id).setItemValue(value);
+    }
+
 }

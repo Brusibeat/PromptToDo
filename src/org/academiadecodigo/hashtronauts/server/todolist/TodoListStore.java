@@ -28,6 +28,12 @@ public class TodoListStore {
      * @return a {@code TodoList} if it exists, or null if it doesn't exist
      */
     public TodoList getTodo(String name){
+        String codedName = Utils.getCRC32(name);
+
+        if (!todoLists.containsKey(codedName)) {
+            loadTodos(name);
+        }
+
         return todoLists.get(Utils.getCRC32(name));
     }
 
@@ -37,29 +43,28 @@ public class TodoListStore {
      */
     public void loadTodos(String fileName){
         String codedName = Utils.getCRC32(fileName);
-        String filePath = PATH + codedName + FILE_FORMAT;
-        byte[] data = new byte[0];
-        data = FileSystem.loadFile( filePath );
+        TodoList todoList = todoLists.containsKey(codedName) ? todoLists.get(codedName) : createTodo(fileName);
 
-        if (data == null ) {
-            return;
+        synchronized (todoList) {
+
+            String filePath = PATH + codedName + FILE_FORMAT;
+            byte[] data = new byte[0];
+            data = FileSystem.loadFile( filePath );
+
+            if (data == null ) {
+                return;
+            }
+
+            String[] items = new String(data).split("\n");
+            String[] itemData;
+
+            for(int i = 0; i < items.length; i++){
+                itemData = items[i].split(":");
+
+                todoList.createItem(Integer.parseInt(itemData[0]), itemData[3]);
+            }
+
         }
-
-        if( !todoLists.containsKey(fileName)){
-            createTodo( fileName );
-        }
-
-        TodoList loadedList = todoLists.get( fileName );
-        String[] items = data.toString().split("\n");
-        String[] itemData;
-
-        for(int i = 0; i < items.length; i++){
-            itemData = items[i].split(":");
-
-            loadedList.createItem(Integer.parseInt(itemData[0]), itemData[3]);
-        }
-
-        loadedList.createItem();
     }
 
     /**
@@ -67,16 +72,21 @@ public class TodoListStore {
      * @param fileName name of the list to save as a file
      */
     public void saveTodos(String fileName){
+
         String codedName = Utils.getCRC32( fileName );
-        String filePath = PATH + codedName + FILE_FORMAT;
+        TodoList todoList = todoLists.get(codedName);
 
-        StringBuilder data = new StringBuilder();
+        synchronized (todoList) {
+            String filePath = PATH + codedName + FILE_FORMAT;
 
-        for (TodoItem item : todoLists.get(codedName).getItems().values()) {
-            data.append(item.toString());
+            StringBuilder data = new StringBuilder();
+
+            for (TodoItem item : todoList.getItems().values()) {
+                data.append(item.toString());
+            }
+
+            FileSystem.saveFile( filePath, data.toString().getBytes());
         }
-
-        FileSystem.saveFile( filePath, data.toString().getBytes());
     }
 
     /**
