@@ -1,6 +1,7 @@
 package org.academiadecodigo.hashtronauts.client.helpers;
 
 import org.academiadecodigo.bootcamp.Prompt;
+import org.academiadecodigo.bootcamp.scanners.integer.IntegerInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.PasswordInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.StringSetInputScanner;
@@ -171,7 +172,15 @@ public class Client {
             System.out.println("Listing items in " + todoTitle + "\n");
 
             for (String item : args.split(",")) {
-                System.out.println("#" + itemsNum + " - " + item);
+                String[] sections = item.split(":");
+
+                boolean isDone = Boolean.valueOf(sections[4]);
+
+                String entry = String.format("[%c]  #%s - %s (Edited By: %s @ %s )", isDone ? '\u2713' : ' ', itemsNum, sections[3], sections[1], sections[2]);
+
+                System.out.println(entry);
+
+
                 itemsNum++;
             }
 
@@ -227,8 +236,35 @@ public class Client {
 
     /** Edits a item */
     private void editItem() {
+        IntegerInputScanner todoItemNumScanner = new IntegerInputScanner();
+        todoItemNumScanner.setError("Invalid number!");
+        todoItemNumScanner.setMessage("Item Number to Change: ");
 
+        int itemNum = prompt.getUserInput(todoItemNumScanner);
 
+        while (itemNum <= 0) {
+            todoItemNumScanner.error(System.err);
+            itemNum = prompt.getUserInput(todoItemNumScanner);
+        }
+
+        StringInputScanner todoItemScanner = new StringInputScanner();
+        todoItemScanner.setMessage("Todo Item description: ");
+
+        String itemValue = prompt.getUserInput(todoItemScanner);
+
+        serverListener.sendToServer(Communication.buildMessage(Communication.Command.EDIT_ITEM, new String[]{todoTitle, itemNum+"", itemValue}));
+
+        try {
+            String message = serverListener.receiveFromServer();
+
+            if (message.split(" ")[2].equals(itemValue)) {
+                System.out.println("Item Changed!");
+                return;
+            }
+
+            System.out.println("Error changing item");
+        } catch (IOException e) {
+        }
     }
 
     /** Creates a t0d0 item */
