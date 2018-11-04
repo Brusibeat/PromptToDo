@@ -48,7 +48,7 @@ public class ClientConnector {
         return server.createItem(listName, itemText, user, date);
     }
 
-    public TodoList getTodoList(String name){
+    public TodoList getTodoList(String name) {
         return server.getTodoList(name);
     }
 

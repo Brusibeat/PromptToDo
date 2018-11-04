@@ -64,10 +64,7 @@ public class TodoList {
      * @return True if the item is being edited, false if it's not being edited.
      */
     public boolean canEdit(int id){
-        if( items.get(id).isLocked() ){
-            return false;
-        }
-        return true;
+        return !items.get(id).isLocked();
     }
 
     /**
@@ -125,13 +122,14 @@ public class TodoList {
 
     /**
      * Create a new T0D0 item, with the received parameters
-     * @param id - ID of the item
+     *
+     * @param id    - ID of the item
      * @param value - the value of the item
-     * @param user - the user who created the item
-     * @param date - the date it was created
+     * @param user  - the user who created the item
+     * @param date  - the date it was created
      * @return the created item
      */
-    public TodoItem createItem(int id, String value, User user, Date date){
+    public TodoItem createItem(int id, String value, User user, Date date) {
         TodoItem newItem = new TodoItem(id, value, user, date);
 
         items.put(id, newItem);
@@ -141,12 +139,13 @@ public class TodoList {
 
     /**
      * Fetches the values of all items contained on the list
+     *
      * @return a String array containing all items' values
      */
-    public String[] getAllItems(){
+    public String[] getAllItems() {
         String[] itemList = new String[items.size()];
         int i = 0;
-        for( TodoItem item : items.values()){
+        for (TodoItem item : items.values()) {
             itemList[i] = item.getItemValue();
             i++;
         }

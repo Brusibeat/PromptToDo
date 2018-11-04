@@ -131,7 +131,7 @@ public class Server {
 
     }
 
-    public TodoList getTodoList(String name){
+    public TodoList getTodoList(String name) {
         return listStore.getTodo(name);
     }
 

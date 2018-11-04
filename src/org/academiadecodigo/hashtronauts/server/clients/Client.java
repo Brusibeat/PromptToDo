@@ -123,7 +123,7 @@ public class Client implements Runnable {
                     break;
                 case CREATE_ITEM:
                     Boolean createItemResult = serverBridge.createItem(args[0], args[1], user, new Date());
-                    sendToClient(Communication.buildMessage(Command.RESPONSE, new String[] {createItemResult.toString()}));
+                    sendToClient(Communication.buildMessage(Command.RESPONSE, new String[]{createItemResult.toString()}));
                     break;
                 case EDIT_ITEM:
                     String updatedItemValue = serverBridge.updateItem(args[0], Integer.valueOf(args[1]), args[2]);

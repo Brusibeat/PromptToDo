@@ -4,6 +4,8 @@ import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
 import org.academiadecodigo.hashtronauts.client.utils.ClientMessages;
 
+import java.util.NoSuchElementException;
+
 public class Menus {
 
     /**
@@ -67,7 +69,14 @@ public class Menus {
         menu.setMessage(ClientMessages.MAIN_MENU_MESSAGE.toString());
         menu.setError(ClientMessages.MAIN_MENU_ERROR.toString());
 
-        int item = prompt.getUserInput(menu);
+        int item;
+
+        try {
+            item = prompt.getUserInput(menu);
+        } catch (NoSuchElementException ex) {
+            return null;
+        }
+
 
         return menuItems[item - 1];
     }

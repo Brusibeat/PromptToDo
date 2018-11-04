@@ -1,13 +1,9 @@
 package org.academiadecodigo.hashtronauts.server.todolist;
 
-import org.academiadecodigo.hashtronauts.server.users.User;
 import org.academiadecodigo.hashtronauts.server.utils.FileSystem;
 import org.academiadecodigo.hashtronauts.server.utils.Utils;
 
-import java.io.FileNotFoundException;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.zip.CRC32;
 
 public class TodoListStore {
 
@@ -50,16 +46,16 @@ public class TodoListStore {
 
             String filePath = PATH + codedName + FILE_FORMAT;
             byte[] data = new byte[0];
-            data = FileSystem.loadFile( filePath );
+            data = FileSystem.loadFile(filePath);
 
-            if (data == null ) {
+            if (data == null) {
                 return;
             }
 
             String[] items = new String(data).split("\n");
             String[] itemData;
 
-            for(int i = 0; i < items.length; i++){
+            for (int i = 0; i < items.length; i++) {
                 itemData = items[i].split(":");
 
                 todoList.createItem(Integer.parseInt(itemData[0]), itemData[3]);
@@ -86,7 +82,7 @@ public class TodoListStore {
                 data.append(item.toString());
             }
 
-            FileSystem.saveFile( filePath, data.toString().getBytes());
+            FileSystem.saveFile(filePath, data.toString().getBytes());
         }
     }
 
