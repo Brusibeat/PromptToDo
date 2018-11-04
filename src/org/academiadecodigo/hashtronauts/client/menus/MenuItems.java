@@ -18,7 +18,10 @@ public enum MenuItems {
     //T0d0 Menu
     CREATE_TODO("Create Todo List"),
     CREATE_ITEM("Create a Todo Item"),
-    EDIT_ITEM("Edit a Todo Item");
+    EDIT_ITEM("Edit a Todo Item"),
+
+    //General
+    BACK("Back");
 
     /**
      * The shown description at the menu
