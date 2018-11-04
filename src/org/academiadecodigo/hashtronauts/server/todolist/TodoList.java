@@ -148,7 +148,7 @@ public class TodoList {
         String[] itemList = new String[items.size()];
         int i = 0;
         for( TodoItem item : items.values()){
-            itemList[i] = item.getItemValue();
+            itemList[i] = item.toString();
             i++;
         }
         return itemList;
