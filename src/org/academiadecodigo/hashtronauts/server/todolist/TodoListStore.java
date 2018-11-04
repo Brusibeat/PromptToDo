@@ -5,12 +5,13 @@ import org.academiadecodigo.hashtronauts.server.utils.Utils;
 
 import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.zip.CRC32;
 
 public class TodoListStore {
 
     private HashMap<String, TodoList> todoLists;
-    private final String PATH = "resources/";
+    private final String PATH = "resources/lists/";
     private final String FILE_FORMAT = ".txt";
 
     /**
@@ -23,11 +24,11 @@ public class TodoListStore {
 
     /**
      * Fetches a TodoList by ID
-     * @param id - the ID of the requested list
+     * @param name - the name of the requested list
      * @return a {@code TodoList} if it exists, or null if it doesn't exist
      */
-    public TodoList getTodo(int id){
-        return todoLists.get(id);
+    public TodoList getTodo(String name){
+        return todoLists.get(Utils.getCRC32(name));
     }
 
     /**
@@ -69,17 +70,13 @@ public class TodoListStore {
         String codedName = Utils.getCRC32( fileName );
         String filePath = PATH + codedName + FILE_FORMAT;
 
-        String data = "";
-        TodoItem item;
-        for( int i = 0; i < todoLists.get( fileName ).getItems().size(); i++){
-            item = todoLists.get( fileName ).getItem(i);
-            data = item.getItemID() + ":";
-            data += item.getEditedBy() + ":";
-            data += item.getEditedDate() + ":";
-            data += item.getItemValue() + "\n";
+        StringBuilder data = new StringBuilder();
+
+        for (TodoItem item : todoLists.get(codedName).getItems().values()) {
+            data.append(item.toString());
         }
 
-        FileSystem.saveFile( filePath, data.getBytes());
+        FileSystem.saveFile( filePath, data.toString().getBytes());
     }
 
     /**
