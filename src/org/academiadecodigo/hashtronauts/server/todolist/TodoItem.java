@@ -136,7 +136,7 @@ public class TodoItem {
 
     @Override
     public String toString(){
-        return String.format("%d:%s:%s:%s\n", itemID, editedBy, Utils.getFormattedDate(editedDate), itemValue);
+        return String.format("%d:%s:%s:%s\n", itemID, editedBy.getUsername(), Utils.getFormattedDate(editedDate), itemValue);
     }
 
 }
