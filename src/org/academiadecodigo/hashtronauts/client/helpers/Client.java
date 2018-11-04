@@ -85,6 +85,45 @@ public class Client {
         }
     }
 
+    public void startTodoListsMenu() {
+        while(true){
+            MenuItems selectedMenu = Menus.getTodoListsMenu(prompt);
+
+            switch(selectedMenu){
+                case CREATE_TODO:
+                    createTodo();
+                case CREATE_ITEM:
+                    createItem();
+                case EDIT_ITEM:
+                    editItem();
+                case LOGOUT:
+                    logoutUser();
+                    break;
+            }
+        }
+    }
+
+    private void editItem() {
+
+    }
+
+    private void createItem() {
+        StringInputScanner todoItemScanner = new StringInputScanner();
+        todoItemScanner.setMessage("Todo Item description: ");
+
+        String itemValue = prompt.getUserInput(todoItemScanner);
+
+
+    }
+
+    private void createTodo() {
+        StringInputScanner todoListId = new StringInputScanner();
+        todoListId.setMessage("List ID: ");
+
+        String todoId = prompt.getUserInput(todoListId);
+
+    }
+
     /**
      * Closes the connection to the server
      */

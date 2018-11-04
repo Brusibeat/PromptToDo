@@ -8,7 +8,10 @@ public enum MenuItems {
     LOGIN("Login"),
     LOGOUT("Logout"),
     REGISTER("Register"),
-    EXIT("Exit");
+    EXIT("Exit"),
+    CREATE_TODO("Create Todo List"),
+    CREATE_ITEM("Create a Todo Item"),
+    EDIT_ITEM("Edit a Todo Item");
 
 
     /**
