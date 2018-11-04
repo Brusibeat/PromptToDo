@@ -114,7 +114,6 @@ public class Client {
                     logoutUser();
                     return;
             }
-
         }
     }
 
@@ -138,6 +137,7 @@ public class Client {
         }
     }
 
+    /** Gets list from server */
     private String getList() {
         String title = getListTitleScanner();
 
@@ -150,26 +150,39 @@ public class Client {
             return null;
         }
 
-        if (Communication.getMethodFromMessage(message) == Communication.Method.ACK) {
-            //TODO: Finish this
+        if (Communication.getMethodFromMessage(message) == Communication.Method.ACK &&
+            Communication.getCommandFromMessage(message) == Communication.Command.GET_LIST) {
+            return title;
         }
 
         return null;
     }
 
+    /** Creates a new T0d0 list */
+    private String createTodo() {
+        String title = getListTitleScanner();
+
+        serverListener.sendToServer(Communication.buildMessage(Communication.Command.CREATE_LIST, new String[]{title}));
+
+        return title;
+    }
+
+    /** Edits a item */
     private void editItem() {
 
     }
 
+    /** Creates a t0d0 item */
     private void createItem() {
         StringInputScanner todoItemScanner = new StringInputScanner();
         todoItemScanner.setMessage("Todo Item description: ");
 
         String itemValue = prompt.getUserInput(todoItemScanner);
 
-
+        serverListener.sendToServer(Communication.buildMessage(Communication.Command.CREATE_ITEM, new String[]{itemValue}));
     }
 
+    /** PromptView Scanner to get List ID */
     private String getListTitleScanner() {
         StringInputScanner todoListId = new StringInputScanner();
         todoListId.setMessage("List ID: ");
@@ -178,7 +191,6 @@ public class Client {
 
         return todoId;
     }
-
 
 
     /** Closes the connection to the server */
