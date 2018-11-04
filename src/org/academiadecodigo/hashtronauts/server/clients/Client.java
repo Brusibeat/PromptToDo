@@ -103,7 +103,6 @@ public class Client implements Runnable {
         Command command = Communication.getCommandFromMessage(message);
 
         String[] args = message.split(" ")[2].split(",");
-        //POST register qwerty,123456
 
         String response;
         if (method == Method.POST) {
@@ -124,6 +123,20 @@ public class Client implements Runnable {
                         response = "false";
                     }
                     sendToClient(Communication.buildMessage(Command.RESPONSE, new String[]{response}));
+                    break;
+                case CREATE_LIST:
+                    Boolean createResult = serverBridge.createList(args[0]);
+                    sendToClient(Communication.buildMessage(Command.RESPONSE, new String[] {createResult.toString()}));
+                    break;
+            }
+        }
+
+        if (method == Method.GET) {
+            switch (command) {
+                case GET_LIST:
+                    Boolean getResult = serverBridge.getList(args[0]);
+                    sendToClient(Communication.buildMessage(Command.RESPONSE, new String[] {getResult.toString()}));
+                    break;
             }
         }
     }

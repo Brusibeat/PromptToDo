@@ -1,5 +1,8 @@
 package org.academiadecodigo.hashtronauts.comms;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Communication {
 
 
@@ -63,6 +66,36 @@ public class Communication {
 
         return true;
     }
+    public static String[] getArgsFromMessage(String message) {
+
+
+        String[] sections = message.split(" ");
+
+        String strArgs = "";
+
+        for (int i = 2; i < sections.length; i++) {
+            strArgs += sections[i].replaceAll("\n", "");
+        }
+
+        String[] args = new String[1024];
+
+        String[] tmp = strArgs.substring(0, strArgs.indexOf("\"")).split(",");
+
+        for (int i = 0; i < tmp.length; i++) {
+            args[i] = tmp[i];
+        }
+
+        Pattern pattern = Pattern.compile("([\"'])(?:(?=(\\\\?))\\2.)*?\\1");
+
+        Matcher matcher = pattern.matcher(strArgs);
+
+        if (matcher.find()) {
+            args[tmp.length] = matcher.group(0);
+        }
+
+        return args;
+    }
+
 
 
     /**
@@ -75,6 +108,7 @@ public class Communication {
         RESPONSE(Method.ACK, "ack", true),
         REGISTER(Method.POST, "register", true),
         CREATE_LIST(Method.POST, "createList", true),
+        GET_LIST(Method.GET, "getList", true),
         CREATE_ITEM(Method.POST, "createItem", true),
         EDIT_ITEM(Method.POST, "editItem", true);
 
