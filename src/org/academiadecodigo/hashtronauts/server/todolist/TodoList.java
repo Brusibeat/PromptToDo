@@ -104,26 +104,6 @@ public class TodoList {
         return items.get(itemId);
     }
 
-//    /**
-//     * Creates a new item for the list
-//     * @return a {@code TodoItem}
-//     */
-//    public TodoItem createItem(){
-//        TodoItem newItem = new TodoItem(items.size() + 1);
-//
-//        items.put(items.size() +1, newItem);
-//
-//        return newItem;
-//    }
-//
-//    public TodoItem createItem(int id, String value, User user, Date date, boolean todoDone){
-//        TodoItem newItem = new TodoItem(id, value, user, date, todoDone );
-//
-//        items.put(id, newItem);
-//
-//        return newItem;
-//    }
-
     /**
      * Create a new T0D0 item, with the received parameters
      * @param id - ID of the item

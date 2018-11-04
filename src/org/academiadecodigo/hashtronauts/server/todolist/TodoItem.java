@@ -13,33 +13,6 @@ public class TodoItem {
     private User editedBy;
     private Date editedDate;
     private boolean todoDone;
-//
-//    /**
-//     * Constructs an instance of {@code TodoItem} with ID defined
-//     * @param itemID - The ID of the new item
-//     */
-//    public TodoItem(int itemID){
-//        this.itemID = itemID;
-//        this.itemValue = "";
-//        this.locked = false;
-//        this.editedBy = new User(-1, "Unspecified", 123);
-//        this.editedDate = new Date();
-//        this.todoDone = false;
-//    }
-//
-//    /**
-//     * Constructs an instance of {@code TodoItem} with both ID and value defined
-//     * @param itemID the ID of the new item
-//     * @param itemValue the value of the new item
-//     */
-//    public TodoItem(int itemID, String itemValue){
-//        this.itemID = itemID;
-//        this.itemValue = itemValue;
-//        this.locked = false;
-//        this.editedBy = new User(-1, "Unspecified", 123);
-//        this.editedDate = new Date();
-//        this.todoDone = false;
-//    }
 
     /**
      * Constructs an instance of {@code TodoItem} with all parameters received
