@@ -145,4 +145,12 @@ public class Server {
 
         return todoList.getItem(itemId).getItemValue();
     }
+
+    public boolean markItemAsDone(String listName, int itemId, User user){
+        TodoList todoList = listStore.getTodo(listName);
+
+        todoList.getItem(itemId).setDone(true, user);
+
+        return true;
+    }
 }

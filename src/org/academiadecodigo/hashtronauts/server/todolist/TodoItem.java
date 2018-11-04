@@ -128,7 +128,9 @@ public class TodoItem {
         locked = lockState;
     }
 
-    public void setDone(boolean state){
+    public synchronized void setDone(boolean state, User editor){
+        editedBy = editor;
+        editedDate = new Date();
         todoDone = state;
     }
 
