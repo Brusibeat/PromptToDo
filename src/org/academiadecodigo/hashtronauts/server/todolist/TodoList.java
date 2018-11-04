@@ -153,8 +153,10 @@ public class TodoList {
         return itemList;
     }
 
-    public void updateItem(int id, String value) {
+    public void updateItem(int id, String value, boolean todoState, User user, Date date) {
         items.get(id).setItemValue(value);
+        items.get(id).setEdited(user, date);
+        items.get(id).setDone(todoState);
     }
 
 }
