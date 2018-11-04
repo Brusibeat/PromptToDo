@@ -1,6 +1,7 @@
 package org.academiadecodigo.hashtronauts.server.todolist;
 
 import org.academiadecodigo.hashtronauts.server.users.User;
+import org.academiadecodigo.hashtronauts.server.utils.Utils;
 
 import java.util.Date;
 
@@ -11,6 +12,7 @@ public class TodoItem {
     private boolean locked;
     private User editedBy;
     private Date editedDate;
+    private boolean todoDone;
 
     /**
      * Constructs an instance of {@code TodoItem} with ID defined
@@ -22,6 +24,7 @@ public class TodoItem {
         this.locked = false;
         this.editedBy = new User(-1, "Unspecified", 123);
         this.editedDate = new Date();
+        this.todoDone = false;
     }
 
     /**
@@ -35,6 +38,7 @@ public class TodoItem {
         this.locked = false;
         this.editedBy = new User(-1, "Unspecified", 123);
         this.editedDate = new Date();
+        this.todoDone = false;
     }
 
     /**
@@ -51,6 +55,7 @@ public class TodoItem {
         this.locked = false;
         this.editedBy = user;
         this.editedDate = date;
+        this.todoDone = false;
     }
 
     /**
@@ -93,6 +98,10 @@ public class TodoItem {
         return editedDate;
     }
 
+    public boolean isDone(){
+        return todoDone;
+    }
+
     /**
      * Edits the item's value
      * @param value - The new value for this item
@@ -120,9 +129,13 @@ public class TodoItem {
         locked = lockState;
     }
 
+    public void setDone(boolean state){
+        todoDone = state;
+    }
+
     @Override
     public String toString(){
-        return String.format("%d:%s:%s:%s\n", itemID, editedBy, editedDate, itemValue);
+        return String.format("%d:%s:%s:%s\n", itemID, editedBy.getUsername(), Utils.getFormattedDate(editedDate), itemValue);
     }
 
 }

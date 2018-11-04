@@ -135,10 +135,10 @@ public class Server {
         return listStore.getTodo(name);
     }
 
-    public String updateItem(String listName, int itemId, String newValue) {
+    public String updateItem(String listName, int itemId, String newValue, boolean state, User user, Date date) {
         TodoList todoList = listStore.getTodo(listName);
 
-        todoList.updateItem(itemId, newValue);
+        todoList.updateItem(itemId, newValue, state, user, date);
 
         listStore.saveTodos(listName);
         listStore.loadTodos(listName);

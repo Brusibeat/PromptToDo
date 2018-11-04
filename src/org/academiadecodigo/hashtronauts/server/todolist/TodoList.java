@@ -1,6 +1,7 @@
 package org.academiadecodigo.hashtronauts.server.todolist;
 
 import org.academiadecodigo.hashtronauts.server.users.User;
+import org.academiadecodigo.hashtronauts.server.utils.Utils;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -152,8 +153,10 @@ public class TodoList {
         return itemList;
     }
 
-    public void updateItem(int id, String value) {
+    public void updateItem(int id, String value, boolean todoState, User user, Date date) {
         items.get(id).setItemValue(value);
+        items.get(id).setEdited(user, date);
+        items.get(id).setDone(todoState);
     }
 
 }
