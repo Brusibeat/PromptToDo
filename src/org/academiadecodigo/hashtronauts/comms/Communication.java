@@ -63,7 +63,6 @@ public class Communication {
         return true;
     }
 
-
     /**
      * Enum containing all commands
      */

@@ -62,6 +62,7 @@ public class Menus {
                 MenuItems.LIST_ITEMS,
                 MenuItems.CREATE_ITEM,
                 MenuItems.EDIT_ITEM,
+                MenuItems.MARK_DONE,
                 MenuItems.BACK
         };
 

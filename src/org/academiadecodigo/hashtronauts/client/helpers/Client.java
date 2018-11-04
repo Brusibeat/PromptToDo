@@ -141,10 +141,36 @@ public class Client {
                 case EDIT_ITEM:
                     editItem();
                     break;
+                case MARK_DONE:
+                    markItem();
+                    break;
                 case BACK:
                     todoTitle = null;
                     return;
             }
+        }
+    }
+
+    private void markItem() {
+        IntegerInputScanner todoItemNumScanner = new IntegerInputScanner();
+        todoItemNumScanner.setError("Invalid number!");
+        todoItemNumScanner.setMessage("Item number to mark as done: ");
+
+        int itemNum = prompt.getUserInput(todoItemNumScanner);
+
+        serverListener.sendToServer(Communication.buildMessage(Communication.Command.MARK_DONE, new String[]{todoTitle, itemNum+""}));
+
+        try {
+            String message = serverListener.receiveFromServer();
+
+            if (Boolean.valueOf(message.split(" ")[2])) {
+                System.out.println("Item marked as done!");
+                return;
+            }
+
+            System.out.println("Error marking item.");
+        } catch (IOException e) {
+            return;
         }
     }
 

@@ -19,6 +19,7 @@ public enum MenuItems {
     CREATE_ITEM("Create a Todo Item"),
     EDIT_ITEM("Edit a Todo Item"),
     LIST_ITEMS("List all items"),
+    MARK_DONE("Mark item as done"),
 
     //General
     BACK("Back");

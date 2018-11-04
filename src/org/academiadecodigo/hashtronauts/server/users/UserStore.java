@@ -45,7 +45,9 @@ public class UserStore {
             }
         }
 
-        return null;
+        User user = loadUser(username);
+
+        return user;
     }
 
 
@@ -75,9 +77,6 @@ public class UserStore {
      */
     public User validateUser(String username, int password) {
         User user = getUser(username);
-        if (user == null ){
-            user = loadUser(username);
-        }
 
         if (user != null && user.validPassword(password)) {
             users.add(user);
