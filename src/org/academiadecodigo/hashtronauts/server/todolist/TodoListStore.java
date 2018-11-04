@@ -1,5 +1,6 @@
 package org.academiadecodigo.hashtronauts.server.todolist;
 
+import org.academiadecodigo.hashtronauts.server.users.User;
 import org.academiadecodigo.hashtronauts.server.utils.FileSystem;
 import org.academiadecodigo.hashtronauts.server.utils.Utils;
 
@@ -38,8 +39,7 @@ public class TodoListStore {
     public void loadTodos(String fileName){
         String codedName = Utils.getCRC32(fileName);
         String filePath = PATH + codedName + FILE_FORMAT;
-        byte[] data = new byte[0];
-        data = FileSystem.loadFile( filePath );
+        byte[] data = FileSystem.loadFile( filePath );
 
         if (data == null ) {
             return;
@@ -59,7 +59,6 @@ public class TodoListStore {
             loadedList.createItem(Integer.parseInt(itemData[0]), itemData[3]);
         }
 
-        loadedList.createItem();
     }
 
     /**

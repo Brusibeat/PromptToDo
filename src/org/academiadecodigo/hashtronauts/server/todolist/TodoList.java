@@ -2,6 +2,7 @@ package org.academiadecodigo.hashtronauts.server.todolist;
 
 import org.academiadecodigo.hashtronauts.server.users.User;
 
+import java.util.Date;
 import java.util.HashMap;
 
 public class TodoList {
@@ -122,6 +123,26 @@ public class TodoList {
         return newItem;
     }
 
+    /**
+     * Create a new T0D0 item, with the received parameters
+     * @param id - ID of the item
+     * @param value - the value of the item
+     * @param user - the user who created the item
+     * @param date - the date it was created
+     * @return the created item
+     */
+    public TodoItem createItem(int id, String value, User user, Date date){
+        TodoItem newItem = new TodoItem(id, value, user, date);
+
+        items.put(id, newItem);
+
+        return newItem;
+    }
+
+    /**
+     * Fetches the values of all items contained on the list
+     * @return a String array containing all items' values
+     */
     public String[] getAllItems(){
         String[] itemList = new String[items.size()];
         int i = 0;

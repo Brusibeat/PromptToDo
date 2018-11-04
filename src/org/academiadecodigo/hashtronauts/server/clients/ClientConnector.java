@@ -4,6 +4,8 @@ import org.academiadecodigo.hashtronauts.server.Server;
 import org.academiadecodigo.hashtronauts.server.todolist.TodoList;
 import org.academiadecodigo.hashtronauts.server.users.User;
 
+import java.util.Date;
+
 
 /**
  * Class to connect a client and a server with minimum interaction
@@ -42,8 +44,8 @@ public class ClientConnector {
         return server.getList(name);
     }
 
-    public boolean createItem(String listName, String itemText) {
-        return server.createItem(listName, itemText);
+    public boolean createItem(String listName, String itemText, User user, Date date) {
+        return server.createItem(listName, itemText, user, date);
     }
 
     public TodoList getTodoList(String name){

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Date;
 
 import static org.academiadecodigo.hashtronauts.comms.Communication.*;
 
@@ -120,7 +121,7 @@ public class Client implements Runnable {
                     sendToClient(Communication.buildMessage(Command.RESPONSE, new String[] {createResult.toString()}));
                     break;
                 case CREATE_ITEM:
-                    Boolean createItemResult = serverBridge.createItem(args[0], args[1]);
+                    Boolean createItemResult = serverBridge.createItem(args[0], args[1], user, new Date());
                     sendToClient(Communication.buildMessage(Command.RESPONSE, new String[] {createItemResult.toString()}));
                     break;
             }

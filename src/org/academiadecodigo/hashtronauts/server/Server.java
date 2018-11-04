@@ -11,6 +11,7 @@ import org.academiadecodigo.hashtronauts.server.utils.ServerMessages;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -120,10 +121,10 @@ public class Server {
         return listStore.getTodo(name) != null;
     }
 
-    public boolean createItem(String listName, String itemText) {
+    public boolean createItem(String listName, String itemText, User user, Date date) {
         TodoList list = listStore.getTodo(listName);
 
-        list.createItem(list.getItems().size() + 1, itemText);
+        list.createItem(list.getItems().size() + 1, itemText, user, date);
         listStore.saveTodos(listName);
 
         return true;
