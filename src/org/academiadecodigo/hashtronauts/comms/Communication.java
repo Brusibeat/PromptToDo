@@ -73,7 +73,10 @@ public class Communication {
         SHUTDOWN(Method.POST, "shutdown", false),
         LOGIN(Method.POST, "login", true),
         RESPONSE(Method.ACK, "ack", true),
-        REGISTER(Method.POST, "register", true);
+        REGISTER(Method.POST, "register", true),
+        CREATE_LIST(Method.POST, "createList", true),
+        CREATE_ITEM(Method.POST, "createItem", true),
+        EDIT_ITEM(Method.POST, "editItem", true);
 
         private final Method method;
         private final String message;
