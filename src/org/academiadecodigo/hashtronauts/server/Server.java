@@ -113,7 +113,12 @@ public class Server {
         System.out.println(output);
 
         for (ClientConnector client : clients) {
-            output = Utils.padRight(client.getClient().getUser().getUsername(), 10);
+            User user = client.getClient().getUser();
+            if (user == null ) {
+                user = new User(1, "Anonymous", 123);
+            }
+
+            output = Utils.padRight(user.getUsername(), 10);
             output += Utils.padRight(client.getClient().getAddress(), 10);
             System.out.println(output);
 
