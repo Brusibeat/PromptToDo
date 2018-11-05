@@ -78,6 +78,7 @@ public class Server {
 
                 System.out.println(ServerMessages.CLIENT_CONNECTED);
             } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

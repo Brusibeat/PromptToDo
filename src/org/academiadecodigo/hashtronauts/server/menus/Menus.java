@@ -16,6 +16,7 @@ public class Menus {
     public static MenuItems getMainMenu(Prompt prompt) {
 
         MenuItems[] menuItems = {
+                MenuItems.LISTALLCONNECTIONS,
                 MenuItems.SHUTDOWN
         };
 
