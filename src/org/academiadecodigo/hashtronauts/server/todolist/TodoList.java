@@ -1,7 +1,9 @@
 package org.academiadecodigo.hashtronauts.server.todolist;
 
 import org.academiadecodigo.hashtronauts.server.users.User;
+import org.academiadecodigo.hashtronauts.server.utils.Utils;
 
+import java.util.Date;
 import java.util.HashMap;
 
 public class TodoList {
@@ -63,10 +65,7 @@ public class TodoList {
      * @return True if the item is being edited, false if it's not being edited.
      */
     public boolean canEdit(int id){
-        if( items.get(id).isLocked() ){
-            return false;
-        }
-        return true;
+        return !items.get(id).isLocked();
     }
 
     /**
@@ -103,23 +102,40 @@ public class TodoList {
     }
 
     /**
-     * Creates a new item for the list
-     * @return a {@code TodoItem}
+     * Create a new T0D0 item, with the received parameters
+     *
+     * @param id    - ID of the item
+     * @param value - the value of the item
+     * @param user  - the user who created the item
+     * @param date  - the date it was created
+     * @return the created item
      */
-    public TodoItem createItem(){
-        TodoItem newItem = new TodoItem(items.size() + 1);
-
-        items.put(items.size() +1, newItem);
-
-        return newItem;
-    }
-
-    public TodoItem createItem(int id, String value){
-        TodoItem newItem = new TodoItem(id, value);
+    public TodoItem createItem(int id, String value, User user, Date date, boolean todoDone){
+        TodoItem newItem = new TodoItem(id, value, user, date, todoDone);
 
         items.put(id, newItem);
 
         return newItem;
+    }
+
+    /**
+     * Fetches the values of all items contained on the list
+     *
+     * @return a String array containing all items' values
+     */
+    public String[] getAllItems() {
+        String[] itemList = new String[items.size()];
+        int i = 0;
+        for( TodoItem item : items.values()) {
+            itemList[i] = item.toString();
+            i++;
+        }
+        return itemList;
+    }
+
+    public void updateItem(int id, String value, User user, Date date) {
+        items.get(id).setItemValue(value);
+        items.get(id).setEdited(user, date);
     }
 
 }

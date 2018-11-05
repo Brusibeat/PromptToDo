@@ -40,6 +40,7 @@
                 <attribute name="Main-Class" value="${ClientMain.class}"/>
                 <attribute name="Class-Path" value="${lib.dir}"/>
             </manifest>
+            <zipgroupfileset dir="${lib.dir}" includes="*.jar"/>
         </jar>
     </target>
 
@@ -50,6 +51,7 @@
                 <attribute name="Main-Class" value="${ServerMain.class}"/>
                 <attribute name="Class-Path" value="${lib.dir}"/>
             </manifest>
+            <zipgroupfileset dir="${lib.dir}" includes="*.jar"/>
         </jar>
     </target>
 

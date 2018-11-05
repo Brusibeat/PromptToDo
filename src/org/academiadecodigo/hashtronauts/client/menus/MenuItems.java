@@ -11,14 +11,15 @@ public enum MenuItems {
 
 
     //User Menu
-    JOIN_LIST("Join List"),
+    JOIN_LIST("Join a List"),
     CREATE_LIST("Create new List"),
     LOGOUT("Logout"),
 
     //T0d0 Menu
-    CREATE_TODO("Create Todo List"),
     CREATE_ITEM("Create a Todo Item"),
     EDIT_ITEM("Edit a Todo Item"),
+    LIST_ITEMS("List all items"),
+    MARK_DONE("Mark item as done"),
 
     //General
     BACK("Back");

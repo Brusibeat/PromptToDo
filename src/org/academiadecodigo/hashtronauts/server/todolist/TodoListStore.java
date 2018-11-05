@@ -1,12 +1,11 @@
 package org.academiadecodigo.hashtronauts.server.todolist;
 
+import org.academiadecodigo.hashtronauts.server.users.User;
+import org.academiadecodigo.hashtronauts.server.users.UserStore;
 import org.academiadecodigo.hashtronauts.server.utils.FileSystem;
 import org.academiadecodigo.hashtronauts.server.utils.Utils;
 
-import java.io.FileNotFoundException;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.zip.CRC32;
 
 public class TodoListStore {
 
@@ -28,6 +27,18 @@ public class TodoListStore {
      * @return a {@code TodoList} if it exists, or null if it doesn't exist
      */
     public TodoList getTodo(String name){
+        String codedName = Utils.getCRC32(name);
+
+        if (!todoLists.containsKey(codedName)) {
+            String filePath = PATH + codedName + FILE_FORMAT;
+
+            if(!FileSystem.fileExists(filePath)) {
+                return null;
+            }
+
+            loadTodos(name);
+        }
+
         return todoLists.get(Utils.getCRC32(name));
     }
 
@@ -37,29 +48,27 @@ public class TodoListStore {
      */
     public void loadTodos(String fileName){
         String codedName = Utils.getCRC32(fileName);
-        String filePath = PATH + codedName + FILE_FORMAT;
-        byte[] data = new byte[0];
-        data = FileSystem.loadFile( filePath );
+        TodoList todoList = todoLists.containsKey(codedName) ? todoLists.get(codedName) : createTodo(fileName);
 
-        if (data == null ) {
-            return;
+        synchronized (todoList) {
+
+            String filePath = PATH + codedName + FILE_FORMAT;
+            byte[] data = new byte[0];
+            data = FileSystem.loadFile(filePath);
+
+            if (data.length <= 0 ) {
+                return;
+            }
+
+            String[] items = new String(data).split("\n");
+            String[] itemData;
+
+            for (int i = 0; i < items.length; i++) {
+                itemData = items[i].split(":");
+                todoList.createItem(Integer.parseInt(itemData[0]), itemData[3], new User(0,itemData[1],0), Utils.parseFormatteDate(itemData[2]), Boolean.valueOf(itemData[4]));
+            }
+
         }
-
-        if( !todoLists.containsKey(fileName)){
-            createTodo( fileName );
-        }
-
-        TodoList loadedList = todoLists.get( fileName );
-        String[] items = data.toString().split("\n");
-        String[] itemData;
-
-        for(int i = 0; i < items.length; i++){
-            itemData = items[i].split(":");
-
-            loadedList.createItem(Integer.parseInt(itemData[0]), itemData[3]);
-        }
-
-        loadedList.createItem();
     }
 
     /**
@@ -67,16 +76,22 @@ public class TodoListStore {
      * @param fileName name of the list to save as a file
      */
     public void saveTodos(String fileName){
+
         String codedName = Utils.getCRC32( fileName );
-        String filePath = PATH + codedName + FILE_FORMAT;
+        TodoList todoList = todoLists.get(codedName);
 
-        StringBuilder data = new StringBuilder();
+        synchronized (todoList) {
+            String filePath = PATH + codedName + FILE_FORMAT;
 
-        for (TodoItem item : todoLists.get(codedName).getItems().values()) {
-            data.append(item.toString());
+            StringBuilder data = new StringBuilder();
+
+            for (TodoItem item : todoList.getItems().values()) {
+                data.append(item.toString());
+                data.append('\n');
+            }
+
+            FileSystem.saveFile(filePath, data.toString().getBytes());
         }
-
-        FileSystem.saveFile( filePath, data.toString().getBytes());
     }
 
     /**

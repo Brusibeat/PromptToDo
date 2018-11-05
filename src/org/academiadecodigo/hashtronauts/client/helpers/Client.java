@@ -1,6 +1,7 @@
 package org.academiadecodigo.hashtronauts.client.helpers;
 
 import org.academiadecodigo.bootcamp.Prompt;
+import org.academiadecodigo.bootcamp.scanners.integer.IntegerInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.PasswordInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
 import org.academiadecodigo.bootcamp.scanners.string.StringSetInputScanner;
@@ -28,6 +29,10 @@ public class Client {
     /** User Username */
     private String username;
 
+    /**
+     * Current T0d0
+     */
+    private String todoTitle;
 
     public Client() {
         this.prompt = new Prompt(System.in, System.out);
@@ -82,45 +87,6 @@ public class Client {
         }
     }
 
-    public void startTodoListsMenu() {
-        while(true){
-            MenuItems selectedMenu = Menus.getTodoListsMenu(prompt);
-
-            switch(selectedMenu){
-                case CREATE_TODO:
-                    createTodo();
-                case CREATE_ITEM:
-                    createItem();
-                case EDIT_ITEM:
-                    editItem();
-                case LOGOUT:
-                    logoutUser();
-                    break;
-            }
-        }
-    }
-
-    private void editItem() {
-
-    }
-
-    private void createItem() {
-        StringInputScanner todoItemScanner = new StringInputScanner();
-        todoItemScanner.setMessage("Todo Item description: ");
-
-        String itemValue = prompt.getUserInput(todoItemScanner);
-
-
-    }
-
-    private void createTodo() {
-        StringInputScanner todoListId = new StringInputScanner();
-        todoListId.setMessage("List ID: ");
-
-        String todoId = prompt.getUserInput(todoListId);
-
-    }
-
     /**
      * Shows the User Menu to the logged in user
      */
@@ -130,18 +96,233 @@ public class Client {
 
             switch (selectedMenu) {
                 case JOIN_LIST:
-                    System.out.println("Join a list");
+                    if (todoTitle == null) {
+                        todoTitle = getList();
+                    }
+
+                    if (todoTitle != null) {
+                        showTodoListMenu();
+                        continue;
+                    }
+
+                    System.out.println(ClientMessages.LIST_NOT_FOUND);
                     break;
                 case CREATE_LIST:
-                    System.out.println("Creating List");
+                    todoTitle = createTodo();
+
+                    if (todoTitle != null) {
+                        System.out.println(ClientMessages.CREATED_LIST);
+                        showTodoListMenu();
+                        continue;
+                    }
+                    System.out.println(ClientMessages.ERROR_CREATING_LIST);
                     break;
                 case LOGOUT:
                     logoutUser();
                     return;
             }
-
         }
     }
+
+    /**
+     * Shows the t0d0 list menu
+     */
+    public void showTodoListMenu() {
+        while(true){
+            MenuItems selectedMenu = Menus.getTodoListsMenu(prompt);
+
+            switch(selectedMenu){
+                case LIST_ITEMS:
+                    listItems();
+                    break;
+                case CREATE_ITEM:
+                    createItem();
+                    break;
+                case EDIT_ITEM:
+                    editItem();
+                    break;
+                case MARK_DONE:
+                    markItem();
+                    break;
+                case BACK:
+                    todoTitle = null;
+                    return;
+            }
+        }
+    }
+
+    private void markItem() {
+        IntegerInputScanner todoItemNumScanner = new IntegerInputScanner();
+        todoItemNumScanner.setError("Invalid number!");
+        todoItemNumScanner.setMessage("Item number to mark as done: ");
+
+        int itemNum = prompt.getUserInput(todoItemNumScanner);
+
+        serverListener.sendToServer(Communication.buildMessage(Communication.Command.MARK_DONE, new String[]{todoTitle, itemNum+""}));
+
+        try {
+            String message = serverListener.receiveFromServer();
+
+            if (Boolean.valueOf(message.split(" ")[2])) {
+                System.out.println("Item marked as done!");
+                return;
+            }
+
+            System.out.println("Error marking item.");
+        } catch (IOException e) {
+            return;
+        }
+    }
+
+    private void listItems() {
+        serverListener.sendToServer(Communication.buildMessage(Communication.Command.LIST_ITEMS, new String[]{todoTitle}));
+
+        String message;
+        try {
+            message = serverListener.receiveFromServer();
+
+            String args = "";
+            String[] parts = message.split(" ");
+
+            for (int i = 2; i < parts.length; i++) {
+                args += parts[i];
+            }
+
+            if (parts.length < 3) {
+                System.out.println("No item in list: " + todoTitle);
+                return;
+            }
+
+            int itemsNum = 1;
+
+            System.out.println("Listing items in " + todoTitle + "\n");
+
+            for (String item : args.split(",")) {
+                String[] sections = item.split(":");
+
+                boolean isDone = Boolean.valueOf(sections[4]);
+
+                String entry = String.format("[%c]  #%s - %s (Edited By: %s @ %s )", isDone ? '\u2713' : ' ', itemsNum, sections[3], sections[1], sections[2]);
+
+                System.out.println(entry);
+
+
+                itemsNum++;
+            }
+
+        } catch (IOException e) {
+            return;
+        }
+
+
+
+    }
+
+    /** Gets list from server */
+    private String getList() {
+        String title = getListTitleScanner();
+
+        serverListener.sendToServer(Communication.buildMessage(Communication.Command.GET_LIST, new String[]{title}));
+
+        String message;
+        try {
+            message = serverListener.receiveFromServer();
+        } catch (IOException e) {
+            return null;
+        }
+
+        if (Communication.getMethodFromMessage(message) == Communication.Method.ACK &&
+            Communication.getCommandFromMessage(message) == Communication.Command.RESPONSE) {
+            if (Boolean.valueOf(message.split(" ")[2])) {
+                return title;
+            }
+        }
+
+        return null;
+    }
+
+    /** Creates a new T0d0 list */
+    private String createTodo() {
+        String title = getListTitleScanner();
+
+        serverListener.sendToServer(Communication.buildMessage(Communication.Command.CREATE_LIST, new String[]{title}));
+
+        try {
+            String message = serverListener.receiveFromServer();
+
+            if (Boolean.valueOf(message.split(" ")[2])) {
+                return title;
+            }
+        } catch (IOException e) {
+            return null;
+        }
+
+        return null;
+    }
+
+    /** Edits a item */
+    private void editItem() {
+        IntegerInputScanner todoItemNumScanner = new IntegerInputScanner();
+        todoItemNumScanner.setError("Invalid number!");
+        todoItemNumScanner.setMessage("Item Number to Change: ");
+
+        int itemNum = prompt.getUserInput(todoItemNumScanner);
+
+        while (itemNum <= 0) {
+            todoItemNumScanner.error(System.err);
+            itemNum = prompt.getUserInput(todoItemNumScanner);
+        }
+
+        StringInputScanner todoItemScanner = new StringInputScanner();
+        todoItemScanner.setMessage("Todo Item description: ");
+
+        String itemValue = prompt.getUserInput(todoItemScanner);
+
+        serverListener.sendToServer(Communication.buildMessage(Communication.Command.EDIT_ITEM, new String[]{todoTitle, itemNum+"", itemValue}));
+
+        try {
+            String message = serverListener.receiveFromServer();
+
+            if (message.split(" ")[2].equals(itemValue)) {
+                System.out.println("Item Changed!");
+                return;
+            }
+
+            System.out.println("Error changing item");
+        } catch (IOException e) {
+        }
+    }
+
+    /** Creates a t0d0 item */
+    private void createItem() {
+        StringInputScanner todoItemScanner = new StringInputScanner();
+        todoItemScanner.setMessage("Todo Item description: ");
+
+        String itemValue = prompt.getUserInput(todoItemScanner);
+
+        serverListener.sendToServer(Communication.buildMessage(Communication.Command.CREATE_ITEM, new String[]{todoTitle, itemValue}));
+
+        try {
+            String message = serverListener.receiveFromServer();
+
+            if (Boolean.valueOf(message.split(" ")[2])) {
+                System.out.println("Item Created");
+                return;
+            }
+
+            System.out.println("Error creating item");
+        } catch (IOException e) {
+        }
+    }
+
+    /** PromptView Scanner to get List ID */
+    private String getListTitleScanner() {
+        StringInputScanner todoListId = new StringInputScanner();
+        todoListId.setMessage("List ID: ");
+
+        return prompt.getUserInput(todoListId);
+    }
+
 
     /** Closes the connection to the server */
     private void exitPromptTodo() {

@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
+import java.util.Date;
 
 import static org.academiadecodigo.hashtronauts.comms.Communication.*;
 
@@ -78,7 +80,6 @@ public class Client implements Runnable {
                 handleInput(message);
 
             } catch (IOException e) {
-               // e.printStackTrace();
                 disconnect();
             }
         }
@@ -128,6 +129,17 @@ public class Client implements Runnable {
                     Boolean createResult = serverBridge.createList(args[0]);
                     sendToClient(Communication.buildMessage(Command.RESPONSE, new String[] {createResult.toString()}));
                     break;
+                case CREATE_ITEM:
+                    Boolean createItemResult = serverBridge.createItem(args[0], args[1], user, new Date());
+                    sendToClient(Communication.buildMessage(Command.RESPONSE, new String[]{createItemResult.toString()}));
+                    break;
+                case EDIT_ITEM:
+                    String updatedItemValue = serverBridge.updateItem(args[0], Integer.valueOf(args[1]), args[2], user, new Date());
+                    sendToClient(Communication.buildMessage(Command.RESPONSE, new String[]{updatedItemValue}));
+                    break;
+                case MARK_DONE:
+                    Boolean itemToMark = serverBridge.markItem(args[0], Integer.valueOf(args[1]), user );
+                    sendToClient(Communication.buildMessage(Command.RESPONSE, new String[]{itemToMark.toString()} ));
             }
         }
 
@@ -136,6 +148,10 @@ public class Client implements Runnable {
                 case GET_LIST:
                     Boolean getResult = serverBridge.getList(args[0]);
                     sendToClient(Communication.buildMessage(Command.RESPONSE, new String[] {getResult.toString()}));
+                    break;
+                case LIST_ITEMS:
+                    String[] items = serverBridge.getTodoList(args[0]).getAllItems();
+                    sendToClient(Communication.buildMessage(Command.RESPONSE, items));
                     break;
             }
         }
@@ -150,14 +166,16 @@ public class Client implements Runnable {
         StringBuilder sb = new StringBuilder();
         String message;
 
-
-        while ((message = inputStream.readLine()) != null && !message.isEmpty()) {
-            sb.append(message);
+        try {
+            while ((message = inputStream.readLine()) != null && !message.isEmpty()) {
+                sb.append(message);
+            }
+        } catch (SocketException ex) {
+            return null;
         }
         if (message == null) {
             return null;
         }
-
 
         return sb.toString();
     }
@@ -187,8 +205,6 @@ public class Client implements Runnable {
         } catch (IOException e) {
         }
     }
-
-
 
     public User getUser(){
         return this.user;

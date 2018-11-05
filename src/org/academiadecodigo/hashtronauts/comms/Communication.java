@@ -29,7 +29,6 @@ public class Communication {
             }
         }
 
-
         return method + " " + cmd + " " + arguments+"\n";
     }
 
@@ -97,7 +96,6 @@ public class Communication {
     }
 
 
-
     /**
      * Enum containing all commands
      */
@@ -110,7 +108,9 @@ public class Communication {
         CREATE_LIST(Method.POST, "createList", true),
         GET_LIST(Method.GET, "getList", true),
         CREATE_ITEM(Method.POST, "createItem", true),
-        EDIT_ITEM(Method.POST, "editItem", true);
+        EDIT_ITEM(Method.POST, "editItem", true),
+        LIST_ITEMS(Method.GET, "listItems", true),
+        MARK_DONE(Method.POST, "markDone", true);
 
         private final Method method;
         private final String message;
@@ -148,15 +148,17 @@ public class Communication {
         }
 
         public static Method getFromString(String string) {
-               if (string.equals("GET")) {
-                   return Method.GET;
-               }
 
-               if (string.equals("POST")) {
-                   return Method.POST;
-               }
-
-               return null;
+            switch (string) {
+                case "ACK":
+                    return Method.ACK;
+                case "POST":
+                    return Method.POST;
+                case "GET":
+                    return Method.GET;
+                default:
+                    return null;
+            }
         }
     }
 }
