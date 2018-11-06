@@ -1,0 +1,13 @@
+org.academiadecodigo.hashtronauts.client
+org.academiadecodigo.hashtronauts.client.helpers
+org.academiadecodigo.hashtronauts.client.menus
+org.academiadecodigo.hashtronauts.client.others
+org.academiadecodigo.hashtronauts.client.utils
+org.academiadecodigo.hashtronauts.comms
+org.academiadecodigo.hashtronauts.server
+org.academiadecodigo.hashtronauts.server.clients
+org.academiadecodigo.hashtronauts.server.menus
+org.academiadecodigo.hashtronauts.server.prompt
+org.academiadecodigo.hashtronauts.server.todolist
+org.academiadecodigo.hashtronauts.server.users
+org.academiadecodigo.hashtronauts.server.utils
